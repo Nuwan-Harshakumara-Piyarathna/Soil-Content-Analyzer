@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">SoilContentAnalyzer</string>
+
+<!--    login activity-->
+    <string name="login_pageName">LOGIN</string>
+    <string name="login_userName">User Name</string>
+    <string name="login_password">Password</string>
+    <string name="login_button">LOGIN</string>
+    <string name="Login_forgot">Forget your password?</string>
+    <string name="login_newUser">New User? Sign UP</string>
+    <string name="login_changeLan">Change Language</string>
+    <string name="username_error">Username cannot be empty</string>
+
+<!--    sign up activity-->
+    <string name="sign_up">SIGN UP</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="sign_username">User Name</string>
+    <string name="sign_password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_button">SIGN UP</string>
+</resources>
