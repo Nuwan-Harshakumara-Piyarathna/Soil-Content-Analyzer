@@ -8,4 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <!--    Connection colors-->
+    <color name="colorOnPrimaryConnection">#fff</color>
+    <color name="colorPrimaryConnection">#554911</color>
+    <color name="colorOnPrimaryLightConnection">#EEE3AB</color>
+    <color name="colorAccentConnection">#665815</color>
 </resources>

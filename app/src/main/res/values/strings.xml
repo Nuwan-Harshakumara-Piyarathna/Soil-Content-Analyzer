@@ -19,4 +19,10 @@
     <string name="sign_password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_button">SIGN UP</string>
+
+    <!--    connection check-->
+    <string name="connection_check_oops">OOPS!</string>
+    <string name="connection_check_no_internet_connection">No Internet Connection</string>
+    <string name="connection_check_please_check_your_connection">Please check your connection</string>
+    <string name="connection_check_retry">Retry</string>
 </resources>

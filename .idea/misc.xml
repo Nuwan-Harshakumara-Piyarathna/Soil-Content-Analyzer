@@ -4,11 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/text_click.xml" value="0.3776041666666667" />
+        <entry key="app/src/main/res/drawable/button_shape.xml" value="0.3776041666666667" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.28804347826086957" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29483695652173914" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.28804347826086957" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.28804347826086957" />
-        <entry key="app/src/main/res/layout/check_internet_dialog.xml" value="0.7765567765567766" />
+        <entry key="app/src/main/res/layout/check_internet_dialog.xml" value="0.9" />
         <entry key="app/src/main/res/layout/loading_dialog.xml" value="0.28804347826086957" />
       </map>
     </option>
