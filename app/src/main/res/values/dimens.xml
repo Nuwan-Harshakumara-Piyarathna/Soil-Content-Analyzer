@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--activity_instructions_list_view_headers.xml-->
+    <dimen name="activity_instructions_list_view_headers_padding">8dp</dimen>
+    <dimen name="activity_instructions_list_view_headers_linear_layout_height">50dp</dimen>
+    <dimen name="activity_instructions_list_view_headers_list_item_Header_text_size">17dp</dimen>
+
+    <!--activity_instructions_list_view_values.xml-->
+    <dimen name="activity_instructions_list_view_values_list_view_item_text_size">14dp</dimen>
+
+    <!--activity_privacy_policy.xml-->
+    <dimen name="activity_privacy_policy_padding">10dp</dimen>
+    <dimen name="activity_privacy_policy_header_1_text_size">25dp</dimen>
+    <dimen name="activity_privacy_policy_value_1_margin_top">10dp</dimen>
+    <dimen name="activity_privacy_policy_header_2_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_value_2_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_3_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_3_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_3_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_4_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_4_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_4_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_5_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_5_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_5_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_6_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_6_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_6_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_7_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_7_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_7_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_8_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_8_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_8_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_9_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_9_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_9_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_header_10_text_size">20dp</dimen>
+    <dimen name="activity_privacy_policy_header_10_margin_top">5dp</dimen>
+    <dimen name="activity_privacy_policy_value_10_margin_top">5dp</dimen>
+
+
+    <dimen name="fragment_steps_expandable_button_parent_layout_height">80dp</dimen>
+    <dimen name="fragment_steps_expandable_button_elevation">4dp</dimen>
+    <dimen name="fragment_steps_expandable_button_gap">25dp</dimen>
+    <dimen name="fragment_steps_expandable_button_main_button_size">45dp</dimen>
+    <dimen name="fragment_steps_expandable_button_sub_button_size">45dp</dimen>
+    <!--fragment_steps-->
+    <dimen name="fragment_steps_padding">10dp</dimen>
+    <dimen name="fragment_steps_top_horizontal_layout_height">80dp</dimen>
+    <dimen name="fragment_steps_steps_card_view_width">200dp</dimen>
+    <dimen name="fragment_steps_steps_card_view_height">200dp</dimen>
+    <dimen name="fragment_steps_steps_card_view_margin_right">5dp</dimen>
+    <dimen name="fragment_steps_steps_card_view_card_corner_radius">4dp</dimen>
+    <dimen name="fragment_steps_human_steps_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_human_steps_text_size">20dp</dimen>
+    <dimen name="fragment_steps_step_unit_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_distance_card_view_width">200dp</dimen>
+    <dimen name="fragment_steps_distance_card_view_height">200dp</dimen>
+    <dimen name="fragment_steps_distance_card_view_margin_left">5dp</dimen>
+    <dimen name="fragment_steps_distance_card_view_card_corner_radius">4dp</dimen>
+    <dimen name="fragment_steps_count_distance_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_count_distance_text_size">20dp</dimen>
+    <dimen name="fragment_steps_count_distance_unit_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_calories_step_goal_horizontal_layout_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_calory_card_view_width">200dp</dimen>
+    <dimen name="fragment_steps_calory_card_view_height">200dp</dimen>
+    <dimen name="fragment_steps_calory_card_view_margin_right">5dp</dimen>
+    <dimen name="fragment_steps_calory_card_view_card_corner_radius">4dp</dimen>
+    <dimen name="fragment_steps_count_calories_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_count_calories_text_size">20dp</dimen>
+    <dimen name="fragment_steps_calory_unit_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_step_goal_card_view_width">200dp</dimen>
+    <dimen name="fragment_steps_step_goal_card_view_height">200dp</dimen>
+    <dimen name="fragment_steps_step_goal_card_view_margin_left">5dp</dimen>
+    <dimen name="fragment_steps_step_goal_card_view_card_corner_radius">4dp</dimen>
+    <dimen name="fragment_steps_step_goal_margin_top">10dp</dimen>
+    <dimen name="fragment_steps_step_goal_text_size">20dp</dimen>
+    <dimen name="fragment_steps_step_goal_unit_margin_top">10dp</dimen>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_device"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_quiz_24"
+        android:title="@string/navbar_device"/>
+    <item
+        android:id="@+id/nav_maps"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/navbar_maps"/>
+    <item
+        android:id="@+id/nav_report"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/navbar_report"/>
+
+</menu>

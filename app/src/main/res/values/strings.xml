@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SoilContentAnalyzer</string>
 
-<!--    login activity-->
+    <!--    login activity-->
     <string name="login_pageName">LOGIN</string>
     <string name="login_userName">User Name</string>
     <string name="login_password">Password</string>
@@ -11,7 +11,7 @@
     <string name="login_changeLan">Change Language</string>
     <string name="username_error">Username cannot be empty</string>
 
-<!--    sign up activity-->
+    <!--    sign up activity-->
     <string name="sign_up">SIGN UP</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -25,4 +25,78 @@
     <string name="connection_check_no_internet_connection">No Internet Connection</string>
     <string name="connection_check_please_check_your_connection">Please check your connection</string>
     <string name="connection_check_retry">Retry</string>
+
+    <!--activity_privacy_policy-->
+    <string name="activity_privacy_policy_header_1">Privacy Policy</string>
+    <string name="activity_privacy_policy_header_2">Information Collection and Use</string>
+    <string name="activity_privacy_policy_header_3">Log Data</string>
+    <string name="activity_privacy_policy_header_4">Cookies</string>
+    <string name="activity_privacy_policy_header_5">Service Providers</string>
+    <string name="activity_privacy_policy_header_6">Security</string>
+    <string name="activity_privacy_policy_header_7">Links to Other Sites</string>
+    <string name="activity_privacy_policy_header_8">Children’s Privacy</string>
+    <string name="activity_privacy_policy_header_9">Changes to This Privacy Policy</string>
+    <string name="activity_privacy_policy_header_10">Contact Us</string>
+    <string name="activity_privacy_policy_value_1">Team Agro built the Smart NPK app as a free app. This SERVICE is provided by Team Smart NPK at no cost and is intended for use as is.
+        This page is used to inform visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.
+        If you choose to use our Service, then you agree to the collection and use of information in relation with this policy. The Personal Information that we collect are used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.
+        </string>
+    <string name="activity_privacy_policy_value_2">For a better experience while using our Service, We may require you to provide us with certain personally identifiable information, including but not limited to add whatever else we collect here.The information that we request will be retained by us and used as described in this privacy policy.
+        The app does use third party services that may collect information used to identify you.</string>
+    <string name="activity_privacy_policy_value_3">We want to inform you that whenever you use our Service, in case of an error in the app We collect data and information on your phone called Log Data. This Log Data may include information such as your devices’s Internet Protocol (“IP”) address, device name, operating system version, configuration of the app when utilising our Service, the time and date of your use of the Service, and other statistics.</string>
+    <string name="activity_privacy_policy_value_4">Cookies are files with small amount of data that is commonly used an anonymous unique identifier.These are sent to your browser from the website that you visit and are stored on your devices’s internal memory.
+        This Services does not uses these “cookies” explicitly. However, the app may use third party code and libraries that use “cookies” to collection information and to improve their services. You have the option to either accept or refuse these cookies, and know when a cookie is being sent to your device. If you choose to refuse our cookies, you may not be able to use some portions of this Service.</string>
+    <string name="activity_privacy_policy_value_5">We may employ third-party companies and individuals due to the following reasons:
+        To facilitate our Service;To provide the Service on our behalf;To perform Service-related services; or To assist us in analyzing how our Service is used.
+We want to inform users of this Service that these third parties have access to your Personal Information. The reason is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the information for any other purpose.</string>
+    <string name="activity_privacy_policy_value_6">We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and we cannot guarantee its absolute security.</string>
+    <string name="activity_privacy_policy_value_7">This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by us. Therefore, We strongly advise you to review the Privacy Policy of these websites. We have no control over, and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.</string>
+    <string name="activity_privacy_policy_value_8">This Services do not address anyone under the age of 12. We do not knowingly collect personal identifiable information from children under 12. In the case I discover that a child under 12 has provided us with personal information, I immediately delete this from our servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us so that I will be able to do necessary actions.</string>
+    <string name="activity_privacy_policy_value_9">We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately, after they are posted on this page.</string>
+    <string name="activity_privacy_policy_value_10">If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.</string>
+
+    <!--InstructionsActivity-->
+    <string name="instructions_activity_header_1">How to add a Quiz?</string>
+    <string name="instructions_activity_header_2">How to see created Quizzes?</string>
+    <string name="instructions_activity_header_3">Can I edit the Created Quiz problems?</string>
+    <string name="instructions_activity_header_4">I am a Quiz Participant. How to Get the Quiz Id?</string>
+    <string name="instructions_activity_header_5">How to Join a Quiz?</string>
+    <string name="instructions_activity_header_6">I am a Quiz Participant. Can I see my Quiz Results?</string>
+    <string name="instructions_activity_header_7">How to see the Leaderboard of a created Quiz?</string>
+    <string name="instructions_activity_header_8">How to see marks of my past attended Quizzes?</string>
+    <string name="instructions_activity_header_9">Privacy</string>
+    <string name="instructions_activity_header_10">Do you like Our App?</string>
+    <string name="instructions_activity_header_11">What can I do if I see something unusual happening in the App?</string>
+
+    <string name="instructions_activity_header_1_child_data">Go to the Quiz section using the navigation bar. You can click on New Quiz to create a quiz. Then You have to add the Quiz details (Name of the Quiz, Start Date, Start Time, and Duration). Click the Next button and you will redirect to a page to add Questions. After adding the Question You have to provide the fours answers and the correct answer. By Clicking Add To List, You will be able to add previous question to the list and add another Question. After adding 1 or more Questions, You can create the Quiz by Clicking Finish Button.After successful submission, you will get a pop-up message.You can also copy the quiz id from here and share it with the quiz participants</string>
+    <string name="instructions_activity_header_2_child_data">Go to Home Section using the Navigation bar. You can click Schedule to see your created Quizzes.</string>
+    <string name="instructions_activity_header_3_child_data">In the Schedule section you can see your created Quizzes.After clicking one of the Quizzes you will be able to update or delete the Corresponding Quiz problems.You can also add new Questions here</string>
+    <string name="instructions_activity_header_4_child_data">Quiz Creator must share the quiz id with his participants.He/she will copy the quiz id after creating the Quiz and share it with you.</string>
+    <string name="instructions_activity_header_5_child_data">Go to Quiz Section using the Navigation bar. You can click on Join to join a quiz. After the quiz starting time, You have to enter a correct quiz id to join a quiz.</string>
+    <string name="instructions_activity_header_6_child_data">After Submitted the answered Quiz you will be able to see your results.</string>
+    <string name="instructions_activity_header_7_child_data">Only the Quiz Creator can see the Leaderboard of his created Quizzes.He/she can go to the Leaderboard section using the navigation bar to see the leaderboards of each quiz.</string>
+    <string name="instructions_activity_header_8_child_data">Go to Home Section using the navigation bar. You can click on Past Quizzes to see your past attended Quizzes. It will show the quiz name, date, time, and marks of each quiz.</string>
+    <string name="instructions_activity_header_9_child_data">Do not forget to rate Quiz Me on PlayStore</string>
+    <string name="instructions_activity_header_10_child_data">100% private. No personal data collection. No data sharing with third parties.</string>
+    <string name="instructions_activity_header_11_child_data">Be kind to tell the problem to us using the play store review section.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!--    nav bar-->
+    <string name="navbar_device">DEVICE</string>
+    <string name="navbar_report">REPORT</string>
+    <string name="navbar_maps">MAP</string>
+
+    <!--fragment_steps-->
+    <string name="fragment_steps_start_button_text">Connect To Device</string>
+    <string name="fragment_steps_puase_button_text">PAUSE</string>
+    <string name="fragment_steps_count_steps">0</string>
+    <string name="fragment_steps_count_distance">0.0000</string>
+    <string name="fragment_steps_count_calories">0.0000</string>
+    <string name="fragment_steps_step_goal">Step Goal</string>
+    <string name="fragment_steps_step_unit">Steps</string>
+    <string name="fragment_steps_distance_unit">Kms</string>
+    <string name="fragment_steps_calory_unit">Cal</string>
+    <string name="fragment_steps_step_goal_unit">Step goal</string>
 </resources>

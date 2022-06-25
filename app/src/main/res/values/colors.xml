@@ -5,13 +5,50 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#344955</color>
+    <color name="primaryColor">#512da8</color>
+    <color name="primaryLightColor">#8559da</color>
+    <color name="primaryDarkColor">#140078</color>
+    <color name="primaryTextColor">#ffffff</color>
 
     <!--    Connection colors-->
     <color name="colorOnPrimaryConnection">#fff</color>
     <color name="colorPrimaryConnection">#554911</color>
     <color name="colorOnPrimaryLightConnection">#EEE3AB</color>
     <color name="colorAccentConnection">#665815</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="orange">#ff7f00</color>
+    <color name="blue">#3498db</color>
+    <color name="red">#db3434</color>
+    <color name="green">#11b900</color>
+    <color name="yellow">#ffff00</color>
+    <color name="pink">#FF007F</color>
+    <color name="textColor">#F9AA33</color>
+
+    <color name="status_bar_color">#344955</color>
+
+    <!--activity_privacy_policy.xml-->
+    <color name="activity_privacy_policy_text_color">#ffffff</color>
+
+    <!--activity_instructions.xml-->
+    <color name="activity_instructions_cache_color_hint">#000000</color>
+
+    <!--activity_instructions_list_view_headers.xml-->
+    <color name="activity_instructions_list_view_headers_background">#534bae</color>
+    <color name="activity_instructions_list_view_headers_text_color">#ffffff</color>
+
+    <!--activity_instructions_list_view_values.xml-->
+    <color name="activity_instructions_list_view_value_background">#534bae</color>
+    <color name="activity_instructions_list_view_value_text_color">#ffffff</color>
+
+    <!--fragment_steps-->
+    <color name="fragment_steps_cardview_background">#534bae</color>
+    <color name="fragment_steps_text_color">#ffffff</color>
+
+    <color name="tableGreen">#96c896</color>
+
 </resources>
