@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_device"
+        android:id="@+id/nav_path"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_quiz_24"
         android:title="@string/navbar_device"/>

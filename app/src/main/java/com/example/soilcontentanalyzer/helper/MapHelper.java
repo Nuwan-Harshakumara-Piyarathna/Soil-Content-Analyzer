@@ -50,7 +50,7 @@ public class MapHelper {
     private byte MarkerColor;
     private final static String LOG_TAG = "MapHelper";
     private boolean moveCameraToLocation = true;
-    private byte zoomLevel = 12;
+    private byte zoomLevel = 15;
     private float drawRoutePath_pathWidth = 3.0f;
     private int drawRoutePath_pathColor = Color.RED;
     private int Polygon_strokeColor = Color.RED;

@@ -3,34 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReportFragment">
+    android:background="#1F4E4A"
+    tools:context=".ReportFragment"
+    android:id="@+id/report_fragment_container">
 
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#3d455b"
-        android:layout_alignParentLeft="true" >
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:background="#3d455b">
 
         <HorizontalScrollView
             android:id="@+id/hscrll1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:id="@+id/RelativeLayout1"
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
                 android:layout_width="fill_parent"
-                android:layout_gravity="center"
                 android:layout_height="fill_parent"
-                android:orientation="vertical" >
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TableLayout
                     android:id="@+id/table_main"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true" >
-                </TableLayout>
-            </RelativeLayout>
+                    android:layout_centerHorizontal="true"></TableLayout>
+            </LinearLayout>
         </HorizontalScrollView>
     </ScrollView>
 

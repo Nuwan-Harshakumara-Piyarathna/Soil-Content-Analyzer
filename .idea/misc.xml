@@ -5,16 +5,22 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3765625" />
         <entry key="app/src/main/res/drawable-v24/text_click.xml" value="0.3776041666666667" />
+        <entry key="app/src/main/res/drawable/activity_twitter_login_background.xml" value="0.3776041666666667" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.3776041666666667" />
         <entry key="app/src/main/res/drawable/fragment_steps_background.xml" value="0.3776041666666667" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_leaderboard_24.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_logout_24.xml" value="0.21770833333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_question_answer_24.xml" value="0.23333333333333334" />
+        <entry key="app/src/main/res/drawable/radio_normal.xml" value="0.3776041666666667" />
+        <entry key="app/src/main/res/drawable/radio_selected.xml" value="0.3776041666666667" />
+        <entry key="app/src/main/res/drawable/radio_selector.xml" value="0.3776041666666667" />
+        <entry key="app/src/main/res/drawable/text_color.xml" value="0.3776041666666667" />
         <entry key="app/src/main/res/layout/activity_instructions.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/activity_instructions_list_view_headers.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.28804347826086957" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29483695652173914" />
+        <entry key="app/src/main/res/layout/activity_path_fragment.xml" value="0.3383152173913043" />
         <entry key="app/src/main/res/layout/activity_privacy_policy.xml" value="0.2015625" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.28804347826086957" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.28804347826086957" />
@@ -23,6 +29,7 @@
         <entry key="app/src/main/res/layout/fragment_count.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/fragment_device.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.3125" />
         <entry key="app/src/main/res/layout/fragment_report.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/loading_dialog.xml" value="0.28804347826086957" />
         <entry key="app/src/main/res/menu/back_navigation.xml" value="0.2015625" />

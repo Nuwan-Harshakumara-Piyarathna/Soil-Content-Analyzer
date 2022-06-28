@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SoilContentAnalyzer</string>
+    <string name="app_name">Smart NPK Meter</string>
 
     <!--    login activity-->
     <string name="login_pageName">LOGIN</string>

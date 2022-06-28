@@ -2,19 +2,26 @@ package com.example.soilcontentanalyzer;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.soilcontentanalyzer.helper.Measurement;
 import com.example.soilcontentanalyzer.utility.NetworkChangeListener;
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
@@ -24,11 +31,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
-    LoadingDialog loadDialog;
+
+    public static ArrayList<Measurement> measurements = new ArrayList<>();
+    public static int SIZE = 0;
+
+    static BottomNavigationView bottomNav;
+
+
 
     @Override
     protected void onStart() {
@@ -73,12 +88,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
 
@@ -86,10 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new DeviceFragment()).commit();
+                    new PathFragment()).commit();
         }
         installButton90to90();
-
 
     }
 
@@ -104,14 +119,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    public final BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
                     switch (item.getItemId()) {
-                        case R.id.nav_device:
-                            selectedFragment = new DeviceFragment();
+                        case R.id.nav_path:
+                            selectedFragment = new PathFragment();
                             break;
                         case R.id.nav_maps:
                             selectedFragment = new MapsFragment();
@@ -189,7 +204,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }

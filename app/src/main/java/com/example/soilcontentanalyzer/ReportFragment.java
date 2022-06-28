@@ -13,6 +13,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ReportFragment#newInstance} factory method to
@@ -24,42 +26,6 @@ public class ReportFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public double average[][];
-    public double min[][];
-    public double max[][];
-
-    private void createRandomValues() {
-        this.average = new double[4][4];
-        this.min = new double[4][4];
-        this.max = new double[4][4];
-        fillMin(0,5);
-        fillAverage(6,8);
-        fillMax(9,12);
-    }
-
-    private void fillMax(int start, int end) {
-        for (int i = 0; i < max.length; i++) {
-            for (int j = 0; j < max[0].length; j++) {
-                max[i][j] = start + (int)(Math.random() * ((end - start) + 1));
-            }
-        }
-    }
-
-    private void fillMin(int start, int end) {
-        for (int i = 0; i < min.length; i++) {
-            for (int j = 0; j < min[0].length; j++) {
-                min[i][j] = start + (int)(Math.random() * ((end - start) + 1));
-            }
-        }
-    }
-
-    private void fillAverage(int start, int end) {
-        for (int i = 0; i < average.length; i++) {
-            for (int j = 0; j < average[0].length; j++) {
-                average[i][j] = start + (int)(Math.random() * ((end - start) + 1));
-            }
-        }
-    }
 
 
     // TODO: Rename and change types of parameters
@@ -102,8 +68,7 @@ public class ReportFragment extends Fragment {
                              Bundle savedInstanceState) {
         View reportView = inflater.inflate(R.layout.fragment_report, container, false);
         // Inflate the layout for this fragment
-        createRandomValues();
-        init1(reportView);
+        init(reportView);
         return reportView;
     }
 
@@ -111,88 +76,60 @@ public class ReportFragment extends Fragment {
         // https://stackoverflow.com/questions/18207470/adding-table-rows-dynamically-in-android
         TableLayout stk = view.findViewById(R.id.table_main);
         TableRow tbrow0 = new TableRow(getContext());
-        TextView tv0 = new TextView(getContext());
-        tv0.setText(" Sl.No ");
-        tv0.setTextColor(Color.WHITE);
-        tbrow0.addView(tv0);
-        TextView tv1 = new TextView(getContext());
-        tv1.setText(" Product ");
-        tv1.setTextColor(Color.WHITE);
-        tbrow0.addView(tv1);
-        TextView tv2 = new TextView(getContext());
-        tv2.setText(" Unit Price ");
-        tv2.setTextColor(Color.WHITE);
-        tbrow0.addView(tv2);
-        TextView tv3 = new TextView(getContext());
-        tv3.setText(" Stock Remaining ");
-        tv3.setTextColor(Color.WHITE);
-        tbrow0.addView(tv3);
-        stk.addView(tbrow0);
-        for (int i = 0; i < 25; i++) {
-            TableRow tbrow = new TableRow(getContext());
-            TextView t1v = new TextView(getContext());
-            t1v.setText("" + i);
-            t1v.setTextColor(Color.WHITE);
-            t1v.setGravity(Gravity.CENTER);
-            tbrow.addView(t1v);
-            TextView t2v = new TextView(getContext());
-            t2v.setText("Product " + i);
-            t2v.setTextColor(Color.WHITE);
-            t2v.setGravity(Gravity.CENTER);
-            tbrow.addView(t2v);
-            TextView t3v = new TextView(getContext());
-            t3v.setText("Rs." + i);
-            t3v.setTextColor(Color.WHITE);
-            t3v.setGravity(Gravity.CENTER);
-            tbrow.addView(t3v);
-            TextView t4v = new TextView(getContext());
-            t4v.setText("" + i * 15 / 32 * 10);
-            t4v.setTextColor(Color.WHITE);
-            t4v.setGravity(Gravity.CENTER);
-            tbrow.addView(t4v);
-            stk.addView(tbrow);
-        }
+        tbrow0.setBackgroundColor(Color.parseColor("#96c896"));
+//        TableLayout.LayoutParams params1 = new TableLayout.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+//        TableRow.LayoutParams params2 = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4f);
+//        TableRow.LayoutParams params3 = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f);
+//        tbrow0.setLayoutParams(params1);
 
-    }
-
-    public void init1(View view) {
-        // https://stackoverflow.com/questions/18207470/adding-table-rows-dynamically-in-android
-        TableLayout stk = view.findViewById(R.id.table_main);
-        TableRow tbrow0 = new TableRow(getContext());
         TextView tv0 = new TextView(getContext());
-        tv0.setText(" Device No ");
+        tv0.setText(" Location ");
         tv0.setTextColor(Color.WHITE);
+        tv0.setTextSize(20);
+//        tv0.setLayoutParams(params2);
         tbrow0.addView(tv0);
+
         TextView tv1 = new TextView(getContext());
-        tv1.setText(" N ");
+        tv1.setText("    N    ");
         tv1.setTextColor(Color.WHITE);
+        tv1.setTextSize(20);
+//        tv1.setLayoutParams(params3);
         tbrow0.addView(tv1);
+
         TextView tv2 = new TextView(getContext());
-        tv2.setText(" P ");
+        tv2.setText("    P    ");
         tv2.setTextColor(Color.WHITE);
+        tv2.setTextSize(20);
+//        tv2.setLayoutParams(params3);
         tbrow0.addView(tv2);
+
         TextView tv3 = new TextView(getContext());
-        tv3.setText(" K ");
+        tv3.setText("    K    ");
         tv3.setTextColor(Color.WHITE);
+        tv3.setTextSize(20);
+//        tv3.setLayoutParams(params3);
         tbrow0.addView(tv3);
-        TextView tv4 = new TextView(getContext());
-        tv4.setText(" PH ");
-        tv4.setTextColor(Color.WHITE);
-        tbrow0.addView(tv4);
+
         stk.addView(tbrow0);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < MainActivity.SIZE; i++) {
             TableRow tbrow = new TableRow(getContext());
+            tbrow.setBackgroundColor(Color.WHITE);
             TextView t1v = new TextView(getContext());
-            t1v.setText("" + (i+1));
-            t1v.setTextColor(Color.WHITE);
+            t1v.setText("" + MainActivity.measurements.get(i).getLocationNo());
+            t1v.setTextColor(Color.BLACK);
             t1v.setGravity(Gravity.CENTER);
+            t1v.setTextSize(20);
+//            t1v.setLayoutParams(params2);
             tbrow.addView(t1v);
-            for (int j = 0; j < 4; j++) {
-                TextView t2v = new TextView(getContext());
-                t2v.setText("" + this.average[i][j]);
-                t2v.setTextColor(Color.WHITE);
-                t2v.setGravity(Gravity.CENTER);
-                tbrow.addView(t2v);
+            for (int j = 0; j < 3; j++) {
+                TextView tv = new TextView(getContext());
+                DecimalFormat df = new DecimalFormat("#.0");
+                tv.setText(df.format(MainActivity.measurements.get(i).getNPK()[j]));
+                tv.setTextColor(Color.BLACK);
+                tv.setGravity(Gravity.CENTER);
+                tv.setTextSize(20);
+//                tv.setLayoutParams(params3);
+                tbrow.addView(tv);
             }
             stk.addView(tbrow);
         }
