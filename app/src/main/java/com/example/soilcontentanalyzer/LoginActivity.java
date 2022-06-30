@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     LoadingDialog loadDialog;
     Button button;
     TextView languageButton;
-    int isSinhala = 0;
+    public static int isSinhala = 0;
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override

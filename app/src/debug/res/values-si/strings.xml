@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart NPK Meter</string>
+
+<!--    login activity-->
+    <string name="login_pageName">ඇතුල් වන්න</string>
+    <string name="login_userName">පරිශීලක නාමය</string>
+    <string name="login_password">මුරපදය</string>
+    <string name="login_button">පිවිසෙන්න</string>
+    <string name="Login_forgot">ඔබගේ මුරපදය අමතකද?</string>
+    <string name="login_newUser">නව පරිශීලකයෙක්? ලියාපදින්චි වන්න</string>
+    <string name="login_changeLan">භාශාව වෙනස් කරන්න</string>
+    <string name="username_error">"පරිශීලක නාමය හිස් විය නොහැක"</string>
+
+<!--    sign up-->
+    <string name="sign_up">ලියාපදිංචි වන්න</string>
+    <string name="first_name">මුල් නම</string>
+    <string name="last_name">අවසන් නම</string>
+    <string name="sign_username">පරිශීලක නාමය</string>
+    <string name="sign_password">මුරපදය</string>
+    <string name="confirm_password">මුරපදය තහවුරු කරන්න</string>
+    <string name="sign_button">ලියාපදිංචි වන්න</string>
+
+
+    <!--    connection check-->
+    <string name="connection_check_oops">OOPS!</string>
+    <string name="connection_check_no_internet_connection">අන්තර්ජාල සම්බන්ධතාවයක් නොමැත</string>
+    <string name="connection_check_please_check_your_connection">කරුණාකර ඔබේ සම්බන්ධතාවය පරීක්ෂා කරන්න</string>
+    <string name="connection_check_retry">නැවත උත්සාහ කරන්න</string>
+
+    <!--activity_privacy_policy-->
+    <string name="activity_privacy_policy_header_1">රහස්යතා ප්රතිපත්තිය</string>
+    <string name="activity_privacy_policy_header_2">තොරතුරු රැස් කිරීම සහ භාවිතය</string>
+    <string name="activity_privacy_policy_header_3">දත්ත ලොග් කරන්න</string>
+    <string name="activity_privacy_policy_header_4">කුකීස්</string>
+    <string name="activity_privacy_policy_header_5">සේවා සපයන්නන්</string>
+    <string name="activity_privacy_policy_header_6">ආරක්ෂක</string>
+    <string name="activity_privacy_policy_header_7">වෙනත් අඩවි වලට සබැඳි</string>
+    <string name="activity_privacy_policy_header_8">දරුවන්ගේ පෞද්ගලිකත්වය</string>
+    <string name="activity_privacy_policy_header_9">මෙම රහස්‍යතා ප්‍රතිපත්තියේ වෙනස්කම්</string>
+    <string name="activity_privacy_policy_header_10">අපව අමතන්න</string>
+    <string name="activity_privacy_policy_value_1">Team Agro Smart NPK Meter යෙදුම නොමිලේ යෙදුමක් ලෙස ගොඩනගා ඇත. මෙම සේවාව ඇග්‍රෝ කණ්ඩායම විසින් කිසිදු වියදමකින් තොරව සපයනු ලබන අතර එය භාවිතා කිරීමට අදහස් කෙරේ.
+        යමෙක් අපගේ සේවාව භාවිතා කිරීමට තීරණය කරන්නේ නම්, පුද්ගලික තොරතුරු එකතු කිරීම, භාවිතා කිරීම සහ හෙළිදරව් කිරීම සමඟ අපගේ ප්‍රතිපත්ති සම්බන්ධයෙන් අමුත්තන්ට දැනුම් දීමට මෙම පිටුව භාවිතා කෙරේ.
+        ඔබ අපගේ සේවාව භාවිතා කිරීමට තෝරා ගන්නේ නම්, මෙම ප්‍රතිපත්තියට අදාළව තොරතුරු රැස් කිරීමට සහ භාවිතයට ඔබ එකඟ වේ. අප රැස් කරන පුද්ගලික තොරතුරු සේවාව සැපයීම සහ වැඩිදියුණු කිරීම සඳහා භාවිත කෙරේ. මෙම රහස්‍යතා ප්‍රතිපත්තියේ විස්තර කර ඇති පරිදි හැර අපි ඔබේ තොරතුරු කිසිවකු සමඟ භාවිත නොකරමු.</string>
+    <string name="activity_privacy_policy_value_2">අපගේ සේවාව භාවිතා කරන අතරතුර වඩා හොඳ අත්දැකීමක් සඳහා, අප විසින් රැස් කරන වෙනත් ඕනෑම දෙයක් එකතු කිරීමට පමණක් නොව ඒවාට පමණක් සීමා නොවී පුද්ගලිකව හඳුනාගත හැකි තොරතුරු අපට ලබා දෙන ලෙස අපි ඔබෙන් ඉල්ලා සිටිමු. අප ඉල්ලා සිටින තොරතුරු අප විසින් රඳවා ගනු ඇති අතර මෙහි විස්තර කර ඇති පරිදි භාවිතා කරනු ලැබේ රහස්යතා ප්රතිපත්තිය.
+        යෙදුම ඔබව හඳුනා ගැනීමට භාවිතා කරන තොරතුරු රැස් කළ හැකි තෙවන පාර්ශවීය සේවාවන් භාවිතා කරයි.</string>
+    <string name="activity_privacy_policy_value_3">යෙදුමේ යම් දෝෂයක් ඇති වුවහොත්, ඔබ අපගේ සේවාව භාවිතා කරන සෑම අවස්ථාවකම අපි ඔබේ දුරකථනයෙන් ලොග් දත්ත නමින් දත්ත සහ තොරතුරු රැස් කරන බව ඔබට දන්වන්නෙමු. මෙම ලොග් දත්ත වලට ඔබගේ උපාංගවල අන්තර්ජාල කෙටුම්පත (“IP”) ලිපිනය, උපාංගයේ නම, මෙහෙයුම් පද්ධති අනුවාදය, අපගේ සේවාව භාවිතා කරන විට යෙදුමේ වින්‍යාසය, ඔබ සේවාව භාවිතා කළ වේලාව සහ දිනය සහ වෙනත් සංඛ්‍යාලේඛන වැනි තොරතුරු ඇතුළත් විය හැකිය.</string>
+    <string name="activity_privacy_policy_value_4">කුකීස් යනු නිර්නාමික අද්විතීය හඳුනාගැනීමක් භාවිතා කරන කුඩා දත්ත ප්‍රමාණයක් සහිත ලිපිගොනු වේ. මේවා ඔබ පිවිසෙන වෙබ් අඩවියෙන් ඔබගේ බ්‍රව්සරයට යවනු ලබන අතර ඒවා ඔබගේ උපාංගවල අභ්‍යන්තර මතකයේ ගබඩා වේ.
+        මෙම සේවාවන් මෙම “කුකීස්” පැහැදිලිව භාවිතා නොකරයි. කෙසේ වෙතත්, තොරතුරු රැස් කිරීමට සහ ඔවුන්ගේ සේවාවන් වැඩි දියුණු කිරීමට යෙදුමට තෙවන පාර්ශවීය කේත සහ “කුකීස්” භාවිතා කරන පුස්තකාල භාවිතා කළ හැකිය. ඔබට මෙම කුකී පිළිගැනීමට හෝ ප්‍රතික්ෂේප කිරීමට විකල්පයක් ඇති අතර ඔබගේ උපාංගයට කුකියක් යවන්නේ කවදාදැයි දැන ගන්න. ඔබ අපගේ කුකීස් ප්‍රතික්ෂේප කිරීමට තෝරා ගන්නේ නම්, ඔබට මෙම සේවාවේ සමහර කොටස් භාවිතා කිරීමට නොහැකි වනු ඇත.</string>
+    <string name="activity_privacy_policy_value_5">පහත සඳහන් හේතු නිසා අපට තෙවන පාර්ශවීය සමාගම් සහ පුද්ගලයින් සේවයේ යෙදවිය හැකිය:
+        අපගේ සේවාවට පහසුකම් සැලසීම; අප වෙනුවෙන් සේවාව සැපයීම; සේවා ආශ්‍රිත සේවාවන් ඉටු කිරීම; හෝ අපගේ සේවාව භාවිතා කරන ආකාරය විශ්ලේෂණය කිරීමට අපට සහාය වීම.
+මෙම තෙවන පාර්ශවයන්ට ඔබේ පුද්ගලික තොරතුරු වෙත ප්‍රවේශය ඇති බව මෙම සේවාවේ පරිශීලකයින්ට දැනුම් දීමට අපට අවශ්‍යය. හේතුව අප වෙනුවෙන් ඔවුන්ට පවරා ඇති කාර්යයන් ඉටු කිරීමයි. කෙසේ වෙතත්, තොරතුරු අනාවරණය කිරීම හෝ වෙනත් අරමුණු සඳහා භාවිතා නොකිරීමට ඔවුන් බැඳී සිටී.</string>
+    <string name="activity_privacy_policy_value_6">ඔබගේ පුද්ගලික තොරතුරු අපට ලබා දීමේ ඔබේ විශ්වාසය අපි අගය කරමු, එබැවින් අපි එය ආරක්ෂා කිරීම සඳහා වාණිජමය වශයෙන් පිළිගත හැකි මාධ්‍යයන් භාවිතා කිරීමට උත්සාහ කරමු. නමුත් අන්තර්ජාලය හරහා සම්ප්‍රේෂණය වන කිසිදු ක්‍රමයක් හෝ ඉලෙක්ට්‍රොනික ගබඩා කිරීමේ ක්‍රමයක් 100% ආරක්ෂිත සහ විශ්වාසදායක නොවන බව මතක තබා ගන්න, අපට එහි නිරපේක්ෂ ආරක්ෂාව සහතික කළ නොහැක.</string>
+    <string name="activity_privacy_policy_value_7">මෙම සේවාවේ වෙනත් අඩවි වලට සබැඳි අඩංගු විය හැකිය. ඔබ තෙවන පාර්ශවීය සබැඳියක් ක්ලික් කළහොත්, ඔබව එම වෙබ් අඩවිය වෙත යොමු කරනු ඇත. මෙම බාහිර අඩවි අප විසින් ක්‍රියාත්මක නොකරන බව සලකන්න. එබැවින් මෙම වෙබ් අඩවි වල රහස්‍යතා ප්‍රතිපත්තිය සමාලෝචනය කරන ලෙස අපි තරයේ ඔබට උපදෙස් දෙමු. ඕනෑම තෙවන පාර්ශවීය වෙබ් අඩවි හෝ සේවාවන්හි අන්තර්ගතය, රහස්‍යතා ප්‍රතිපත්ති හෝ භාවිතයන් පිළිබඳව අපට කිසිදු පාලනයක් නොමැත.</string>
+    <string name="activity_privacy_policy_value_8">මෙම සේවාවන් වයස අවුරුදු 12 ට අඩු කිසිවෙකු අමතන්නේ නැත. අපි දැනුවත්ව 12 ට අඩු ළමයින්ගෙන් පුද්ගලික හඳුනාගත හැකි තොරතුරු රැස් නොකරමු. 12 ට අඩු දරුවෙකු අපට පුද්ගලික තොරතුරු ලබා දී ඇති බව මා දැනගත්තොත්, මම වහාම අපගේ සේවාදායකයෙන් මෙය මකා දමමි. ඔබ දෙමව්පියන් හෝ භාරකරුවෙකු නම් සහ ඔබේ දරුවා අපට පුද්ගලික තොරතුරු ලබා දී ඇති බව ඔබ දන්නේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න එවිට මට අවශ්‍ය ක්‍රියාමාර්ග ගැනීමට හැකි වනු ඇත.</string>
+    <string name="activity_privacy_policy_value_9">අපි වරින් වර අපගේ රහස්‍යතා ප්‍රතිපත්තිය යාවත්කාලීන කළ හැකිය. මේ අනුව, කිසියම් වෙනස්කමක් සඳහා වරින් වර මෙම පිටුව සමාලෝචනය කිරීමට ඔබට උපදෙස් දෙනු ලැබේ. නව රහස්‍යතා ප්‍රතිපත්තිය මෙම පිටුවේ පළ කිරීමෙන් ඕනෑම වෙනස්කමක් පිළිබඳව අපි ඔබට දන්වන්නෙමු. මෙම වෙනස්කම් මෙම පිටුවේ පළ කිරීමෙන් පසු වහාම ක්‍රියාත්මක වේ.</string>
+    <string name="activity_privacy_policy_value_10">අපගේ රහස්‍යතා ප්‍රතිපත්තිය පිළිබඳව ඔබට කිසියම් ප්‍රශ්නයක් හෝ යෝජනා තිබේ නම්, අප හා සම්බන්ධ වීමට පසුබට නොවන්න.</string>
+
+
+    <!--InstructionsActivity-->
+    <string name="instructions_activity_header_1">ස්මාර්ට් NPK මීටර ජංගම යෙදුම වෙත උපාංගය සම්බන්ධ කරන්නේ කෙසේද?</string>
+    <string name="instructions_activity_header_2">NPK යන්නෙන් අදහස් කරන්නේ කුමක්ද? එය වැදගත් වන්නේ ඇයි?</string>
+    <string name="instructions_activity_header_3">ක්ෂේත්ර සිතියම නිර්මාණය කරන්නේ කෙසේද?</string>
+    <string name="instructions_activity_header_4">ක්ෂේත්‍රයේ නිශ්චිත ස්ථානයක NPK අගයන් මැනිය හැක්කේ කෙසේද?</string>
+    <string name="instructions_activity_header_5">උපාංගය මගින් මනිනු ලබන දත්ත වලට කුමක් සිදුවේද?</string>
+    <string name="instructions_activity_header_6">මිනුම් සඳහා වාර්තාව බලන්නේ කෙසේද?</string>
+    <string name="instructions_activity_header_7">මට ස්ථාන කීයක් මිනුම් ගත හැකිද? සීමාවක් තිබේද?</string>
+    <string name="instructions_activity_header_8">ක්ෂේත්‍ර සිතියම සහ සියලු මිනුම් ඉවත් කරන්නේ කෙසේද?</string>
+    <string name="instructions_activity_header_9">පෞද්ගලිකත්වය</string>
+    <string name="instructions_activity_header_10">ඔබ අපගේ යෙදුමට කැමතිද?</string>
+    <string name="instructions_activity_header_11">යෙදුම තුළ අසාමාන්‍ය දෙයක් සිදු වන බව මා දුටුවහොත් මා කුමක් කළ යුතුද?</string>
+
+    <string name="instructions_activity_header_1_child_data">පහළ සංචාලන තීරුව භාවිතයෙන් උපාංග කොටස වෙත යන්න. ඔබට බ්ලූටූත් සක්‍රිය කර උපාංගයට සම්බන්ධ වීමට බ්ලූටූත් වෙත සම්බන්ධ කරන්න ක්ලික් කළ හැකිය.</string>
+    <string name="instructions_activity_header_2_child_data">NPK යනු ශාකයකට අවශ්‍ය ඉතා වැදගත් පෝෂ්‍ය පදාර්ථ තුනක් සඳහා කෙටි ආකාරයකි. එනම් නයිට්‍රජන්, පොස්පරස් සහ පොටෑසියම් ය. හොඳ ඵල ඇති ඕනෑම ශාකයක් වගා කිරීමට එම ශාකයේ NPK මට්ටම් අවශ්‍ය ප්‍රමාණය සපුරාලිය යුතුය.</string>
+    <string name="instructions_activity_header_3_child_data">ඔබට ක්ෂේත්‍ර සිතියම නිර්මාණය කිරීමට අවශ්‍ය ක්ෂේත්‍රයට යන්න.මුලින්ම ඔබගේ ඇන්ඩ්‍රොයිඩ් දුරකථනයේ ස්ථාන විශේෂාංගය ක්‍රියාත්මක කරන්න.එසේම ඔබට ජංගම දත්ත/wifi ක්‍රියාත්මක කිරීමට සිදුවේ.ඔබ පළමු වරට Smart NPK මීටරය භාවිතා කරන්නේ නම්, එය භාවිත ස්ථාන විශේෂාංග සඳහා ඔබෙන් අවසර අසනු ඇත. පසුව, ඔබට පහළ සංචාලන තීරුවේ ඇති සිතියම් කොටස වෙත යා යුතුය. ආරම්භයේදී එය ඔබගේ වත්මන් ස්ථානය පෙන්වයි. රේඛාවක් ඇඳීමට, ඔබට වෙනත් ස්ථානයකට ගොස් ADD ක්ලික් කළ හැක. STOP.මෙම පියවර කිහිප වතාවක් දිගටම කරගෙන යන්න, එවිට ඔබට අවශ්‍ය ක්ෂේත්‍ර සිතියම ලැබෙනු ඇත.</string>
+    <string name="instructions_activity_header_4_child_data">බ්ලූටූත් හරහා ස්මාර්ට් NPK මීටරය වෙත උපාංගය සම්බන්ධ කිරීමෙන් පසු, ඔබට පහළ සංචාලන තීරුවේ ඇති MAP කොටසේ ඇති මිනුම් බොත්තම ක්ලික් කළ හැක. එය උපාංගයෙන් මිනුම් ඉල්ලා සිටින අතර උපාංගය NPK ප්‍රතිඵල ආපසු එවනු ඇත.</string>
+    <string name="instructions_activity_header_5_child_data">ක්ෂේත්‍ර සිතියම සහ NPK මිනුම් දත්ත සුරැකීම සඳහා ඔබ පහළ සංචාලන තීරුවේ ඇති MAP කොටසේ සුරකින්න බොත්තම ක්ලික් කළ යුතුය. සුරකින්න බොත්තම ක්ලික් කිරීමෙන් පසු දත්ත දත්ත සමුදාය දිගටම පවතිනු ඇත. ඔබ සුරකින්න බොත්තම ක්ලික් නොකරන්නේ නම්, දත්ත ගබඩා නොවන  අතර යෙදුම වැසීමෙන් පසු ඒවා ඉවත් කරනු ලැබේ.</string>
+    <string name="instructions_activity_header_6_child_data">ක්ෂේත්‍ර සිතියම නිර්මාණය කර මිනුම් ස්ථාන එකතු කිරීමෙන් පසුව, ඔබට NPK මිනුම් වාර්තාව බැලීම සඳහා පහළ සංචාලන තීරුවේ ඇති REPORT කොටස ක්ලික් කළ හැක.</string>
+    <string name="instructions_activity_header_7_child_data">මිනුම් ගැනීම සඳහා ස්ථාන ගණන සඳහා සීමාවක් නොමැත.</string>
+    <string name="instructions_activity_header_8_child_data">ක්ෂේත්‍ර සිතියම සහ මිනුම් ඇතුළු සියලු දත්ත පිරිසිදු කිරීමට ඔබට සියල්ල clear බොත්තම භාවිත කළ හැක.</string>
+    <string name="instructions_activity_header_9_child_data">100% පුද්ගලික. පුද්ගලික දත්ත එකතු කිරීමක් නැත. තෙවන පාර්ශවයන් සමඟ දත්ත බෙදාගැනීමක් නොමැත.</string>
+    <string name="instructions_activity_header_10_child_data">PlayStore හි Smart NPK මීටරය ශ්‍රේණිගත කිරීමට අමතක නොකරන්න.</string>
+    <string name="instructions_activity_header_11_child_data">ප්ලේ ස්ටෝර් සමාලෝචන අංශය භාවිතයෙන් ගැටලුව අපට පැවසීමට කාරුණික වන්න.</string>
+
+
+    <!--    nav bar-->
+    <string name="navbar_device">උපාංගය</string>
+    <string name="navbar_report">වාර්තාව</string>
+    <string name="navbar_maps">සිතියම</string>
+
+    <!--Device Fragment-->
+    <string name="fragment_steps_start_button_text">උපාංගයට සම්බන්ධ කරන්න</string>
+    <string name="suggest_walk">ඔබේ ක්ෂේත්‍රය හරහා ගොස් එය සිතියම් ගත කිරීමට අපට උදවු කරන්න</string>
+    <string name="start">ආරම්භ කරන්න</string>
+    <string name="start_instruction">ඔබ ඇවිදීමට පටන් ගන්නා විට ආරම්භක බොත්තම ඔබන්න</string>
+
+    <!--Map Fragment-->
+    <string name="add_stop">නැවතුම එක් කරන්න</string>
+    <string name="save">සුරකින්න</string>
+    <string name="measure">මනින්න</string>
+
+    <!--Report Fragment-->
+    <string name="report_instructions">තෝරාගත් ස්ථානවල NPK මිනුම් සඳහා වාර්තාව බලන්න</string>
+    <string name="location">ස්ථානය</string>
+</resources>

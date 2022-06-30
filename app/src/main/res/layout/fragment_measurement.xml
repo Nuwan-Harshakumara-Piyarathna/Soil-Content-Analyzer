@@ -52,7 +52,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="View the report for the NPK measurements of the selected locations"
+                                android:text="@string/report_instructions"
                                 android:textAppearance="?attr/textAppearanceBody2"
                                 android:textColor="?android:attr/textColorSecondary"
                                 />
@@ -75,7 +75,7 @@
                         android:background="@drawable/borderhead">
 
                         <TextView
-                            android:text="Location"
+                            android:text="@string/location"
                             android:textSize="16dp"
                             android:textStyle="bold"
                             android:padding="10dp"

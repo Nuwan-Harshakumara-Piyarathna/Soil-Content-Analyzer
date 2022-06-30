@@ -60,9 +60,9 @@ We want to inform users of this Service that these third parties have access to 
     <string name="instructions_activity_header_2">What is meant by NPK? Why it is important?</string>
     <string name="instructions_activity_header_3">How to create the field map?</string>
     <string name="instructions_activity_header_4">How to measure the NPK values in a certain location in the field?</string>
-    <string name="instructions_activity_header_5">What will happen to the data measured by the device? Will they get removed from the application If I close the app?</string>
+    <string name="instructions_activity_header_5">What will happen to the data measured by the device ?</string>
     <string name="instructions_activity_header_6">How to view the report for the measurements?</string>
-    <string name="instructions_activity_header_7">How many locations can I take the measurements ? Is there a limit ?</string>
+    <string name="instructions_activity_header_7">How many locations can I take the measurements ?</string>
     <string name="instructions_activity_header_8">How can I clear the field map and all the measurements ?</string>
     <string name="instructions_activity_header_9">Privacy</string>
     <string name="instructions_activity_header_10">Do you like Our App?</string>
@@ -72,7 +72,7 @@ We want to inform users of this Service that these third parties have access to 
     <string name="instructions_activity_header_2_child_data">NPK is a short form for three most important nutrients needed for a plant. Which are Nitrogen, Phosphorus and Potassium. To grow any kind of a plant with good fruits we need to fulfill the required amount of NPK levels of that plant.</string>
     <string name="instructions_activity_header_3_child_data">Go to the field where you are need to create the field map.First turn on the location feature of your Android phone.Also you have tot turn on mobile data/wifi.If you are using the Smart NPK Meter for the first time, it will ask you the permissions for use location features.Then , you have to go to the Map section in the bottom navigation bar.At the beginning it will show your current location.To draw a line, you can go to another location and click ADD STOP.Continue this step few times and you will get the field map you need.</string>
     <string name="instructions_activity_header_4_child_data">After connecting the device to Smart NPK Meter via bluetooth, you can click the measure button on MAP section in bottom navigation bar.It will request measurements from Device and device will send back the NPK results.</string>
-    <string name="instructions_activity_header_5_child_data">In order to save the field map and NPK measurement data you must click the save button in the MAP section in bottom navigation bar.After clicking the save button data will get persisted the a database.If you don\'t click the save button, data will not get persisted.</string>
+    <string name="instructions_activity_header_5_child_data">In order to save the field map and NPK measurement data you must click the save button in the MAP section in bottom navigation bar.After clicking the save button data will get persisted the a database.If you don\'t click the save button, data will not get persisted and they will be removed after closing the app.</string>
     <string name="instructions_activity_header_6_child_data">After creating the field map and adding the measurement locations, you can click the REPORT section in the bottom navigation bar in order to view the NPK measurement Report.</string>
     <string name="instructions_activity_header_7_child_data">There is no limit for the no of locations for taking measurements.</string>
     <string name="instructions_activity_header_8_child_data">You can use the clear all button to clean all the data including field map and measurements.</string>
@@ -86,6 +86,18 @@ We want to inform users of this Service that these third parties have access to 
     <string name="navbar_report">REPORT</string>
     <string name="navbar_maps">MAP</string>
 
-    <!--fragment_steps-->
+    <!--Device Fragment-->
     <string name="fragment_steps_start_button_text">Connect To Device</string>
+    <string name="suggest_walk">Walk through your field and help us to map it</string>
+    <string name="start">Start</string>
+    <string name="start_instruction">Press the start button when you start walking</string>
+
+    <!--Map Fragment-->
+    <string name="add_stop">Add Stop</string>
+    <string name="save">Save</string>
+    <string name="measure">Measure</string>
+
+    <!--Report Fragment-->
+    <string name="report_instructions">View the report for the NPK measurements of the selected locations</string>
+    <string name="location">Location</string>
 </resources>
