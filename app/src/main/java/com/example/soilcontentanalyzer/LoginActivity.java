@@ -301,9 +301,11 @@ public class LoginActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            if(responseBody == null){
+                return "Connection Error. Try Again!";
+            }
             if(responseBody.equals("user not found")){
-                return "user not found";
+                return "User not found";
             }
             else if(responseBody.equals("Incorrect userName or Password.")){
                 return "Incorrect userName or Password.";

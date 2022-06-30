@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background = "@color/light_light_green"
+    android:orientation="vertical">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_leader_board"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Media -->
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            app:srcCompat="@drawable/measureboard"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="content_description_media"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="View the report for the NPK measurements of the selected locations"
+                                android:textAppearance="?attr/textAppearanceBody2"
+                                android:textColor="?android:attr/textColorSecondary"
+                                />
+
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp">
+
+                    <TableRow
+                        android:weightSum="10"
+                        android:background="@drawable/borderhead">
+
+                        <TextView
+                            android:text="Location"
+                            android:textSize="16dp"
+                            android:textStyle="bold"
+                            android:padding="10dp"
+                            android:layout_width="0dp"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/white"
+                            android:background="@drawable/borderhead"
+                            android:layout_weight="4"/>
+
+                        <TextView
+                            android:text="N"
+                            android:textSize="16dp"
+                            android:textStyle="bold"
+                            android:padding="10dp"
+                            android:layout_width="0dp"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/white"
+                            android:background="@drawable/borderhead"
+                            android:layout_weight="2"/>
+
+                        <TextView
+                            android:text="P"
+                            android:textSize="16dp"
+                            android:textStyle="bold"
+                            android:padding="10dp"
+                            android:layout_width="0dp"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/white"
+                            android:background="@drawable/borderhead"
+                            android:layout_weight="2"/>
+
+                        <TextView
+                            android:text="K"
+                            android:textSize="16dp"
+                            android:textStyle="bold"
+                            android:padding="10dp"
+                            android:layout_width="0dp"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/white"
+                            android:background="@drawable/borderhead"
+                            android:layout_weight="2"/>
+                    </TableRow>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_measured_values"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </TableLayout>
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+</LinearLayout>

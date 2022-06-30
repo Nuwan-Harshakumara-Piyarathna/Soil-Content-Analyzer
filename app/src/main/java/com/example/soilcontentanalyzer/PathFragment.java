@@ -1,8 +1,5 @@
 package com.example.soilcontentanalyzer;
 
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -17,7 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 import java.util.Set;
 import java.util.UUID;

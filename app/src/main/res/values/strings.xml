@@ -37,7 +37,7 @@
     <string name="activity_privacy_policy_header_8">Children’s Privacy</string>
     <string name="activity_privacy_policy_header_9">Changes to This Privacy Policy</string>
     <string name="activity_privacy_policy_header_10">Contact Us</string>
-    <string name="activity_privacy_policy_value_1">Team Agro built the Smart NPK app as a free app. This SERVICE is provided by Team Smart NPK at no cost and is intended for use as is.
+    <string name="activity_privacy_policy_value_1">Team Agro built the Smart NPK Meter app as a free app. This SERVICE is provided by Team Agro at no cost and is intended for use as is.
         This page is used to inform visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.
         If you choose to use our Service, then you agree to the collection and use of information in relation with this policy. The Personal Information that we collect are used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.
         </string>
@@ -56,31 +56,29 @@ We want to inform users of this Service that these third parties have access to 
     <string name="activity_privacy_policy_value_10">If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.</string>
 
     <!--InstructionsActivity-->
-    <string name="instructions_activity_header_1">How to add a Quiz?</string>
-    <string name="instructions_activity_header_2">How to see created Quizzes?</string>
-    <string name="instructions_activity_header_3">Can I edit the Created Quiz problems?</string>
-    <string name="instructions_activity_header_4">I am a Quiz Participant. How to Get the Quiz Id?</string>
-    <string name="instructions_activity_header_5">How to Join a Quiz?</string>
-    <string name="instructions_activity_header_6">I am a Quiz Participant. Can I see my Quiz Results?</string>
-    <string name="instructions_activity_header_7">How to see the Leaderboard of a created Quiz?</string>
-    <string name="instructions_activity_header_8">How to see marks of my past attended Quizzes?</string>
+    <string name="instructions_activity_header_1">How to connect the device to Smart NPK Meter mobile app?</string>
+    <string name="instructions_activity_header_2">What is meant by NPK? Why it is important?</string>
+    <string name="instructions_activity_header_3">How to create the field map?</string>
+    <string name="instructions_activity_header_4">How to measure the NPK values in a certain location in the field?</string>
+    <string name="instructions_activity_header_5">What will happen to the data measured by the device? Will they get removed from the application If I close the app?</string>
+    <string name="instructions_activity_header_6">How to view the report for the measurements?</string>
+    <string name="instructions_activity_header_7">How many locations can I take the measurements ? Is there a limit ?</string>
+    <string name="instructions_activity_header_8">How can I clear the field map and all the measurements ?</string>
     <string name="instructions_activity_header_9">Privacy</string>
     <string name="instructions_activity_header_10">Do you like Our App?</string>
     <string name="instructions_activity_header_11">What can I do if I see something unusual happening in the App?</string>
 
-    <string name="instructions_activity_header_1_child_data">Go to the Quiz section using the navigation bar. You can click on New Quiz to create a quiz. Then You have to add the Quiz details (Name of the Quiz, Start Date, Start Time, and Duration). Click the Next button and you will redirect to a page to add Questions. After adding the Question You have to provide the fours answers and the correct answer. By Clicking Add To List, You will be able to add previous question to the list and add another Question. After adding 1 or more Questions, You can create the Quiz by Clicking Finish Button.After successful submission, you will get a pop-up message.You can also copy the quiz id from here and share it with the quiz participants</string>
-    <string name="instructions_activity_header_2_child_data">Go to Home Section using the Navigation bar. You can click Schedule to see your created Quizzes.</string>
-    <string name="instructions_activity_header_3_child_data">In the Schedule section you can see your created Quizzes.After clicking one of the Quizzes you will be able to update or delete the Corresponding Quiz problems.You can also add new Questions here</string>
-    <string name="instructions_activity_header_4_child_data">Quiz Creator must share the quiz id with his participants.He/she will copy the quiz id after creating the Quiz and share it with you.</string>
-    <string name="instructions_activity_header_5_child_data">Go to Quiz Section using the Navigation bar. You can click on Join to join a quiz. After the quiz starting time, You have to enter a correct quiz id to join a quiz.</string>
-    <string name="instructions_activity_header_6_child_data">After Submitted the answered Quiz you will be able to see your results.</string>
-    <string name="instructions_activity_header_7_child_data">Only the Quiz Creator can see the Leaderboard of his created Quizzes.He/she can go to the Leaderboard section using the navigation bar to see the leaderboards of each quiz.</string>
-    <string name="instructions_activity_header_8_child_data">Go to Home Section using the navigation bar. You can click on Past Quizzes to see your past attended Quizzes. It will show the quiz name, date, time, and marks of each quiz.</string>
-    <string name="instructions_activity_header_9_child_data">Do not forget to rate Quiz Me on PlayStore</string>
-    <string name="instructions_activity_header_10_child_data">100% private. No personal data collection. No data sharing with third parties.</string>
+    <string name="instructions_activity_header_1_child_data">Go to the Device section using the bottom navigation bar. You can click on Connect to Bluetooth to turn on bluetooth and connect to the device.</string>
+    <string name="instructions_activity_header_2_child_data">NPK is a short form for three most important nutrients needed for a plant. Which are Nitrogen, Phosphorus and Potassium. To grow any kind of a plant with good fruits we need to fulfill the required amount of NPK levels of that plant.</string>
+    <string name="instructions_activity_header_3_child_data">Go to the field where you are need to create the field map.First turn on the location feature of your Android phone.Also you have tot turn on mobile data/wifi.If you are using the Smart NPK Meter for the first time, it will ask you the permissions for use location features.Then , you have to go to the Map section in the bottom navigation bar.At the beginning it will show your current location.To draw a line, you can go to another location and click ADD STOP.Continue this step few times and you will get the field map you need.</string>
+    <string name="instructions_activity_header_4_child_data">After connecting the device to Smart NPK Meter via bluetooth, you can click the measure button on MAP section in bottom navigation bar.It will request measurements from Device and device will send back the NPK results.</string>
+    <string name="instructions_activity_header_5_child_data">In order to save the field map and NPK measurement data you must click the save button in the MAP section in bottom navigation bar.After clicking the save button data will get persisted the a database.If you don\'t click the save button, data will not get persisted.</string>
+    <string name="instructions_activity_header_6_child_data">After creating the field map and adding the measurement locations, you can click the REPORT section in the bottom navigation bar in order to view the NPK measurement Report.</string>
+    <string name="instructions_activity_header_7_child_data">There is no limit for the no of locations for taking measurements.</string>
+    <string name="instructions_activity_header_8_child_data">You can use the clear all button to clean all the data including field map and measurements.</string>
+    <string name="instructions_activity_header_9_child_data">100% private. No personal data collection. No data sharing with third parties.</string>
+    <string name="instructions_activity_header_10_child_data">Do not forget to rate Smart NPK Meter on PlayStore</string>
     <string name="instructions_activity_header_11_child_data">Be kind to tell the problem to us using the play store review section.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
     <!--    nav bar-->
@@ -90,13 +88,4 @@ We want to inform users of this Service that these third parties have access to 
 
     <!--fragment_steps-->
     <string name="fragment_steps_start_button_text">Connect To Device</string>
-    <string name="fragment_steps_puase_button_text">PAUSE</string>
-    <string name="fragment_steps_count_steps">0</string>
-    <string name="fragment_steps_count_distance">0.0000</string>
-    <string name="fragment_steps_count_calories">0.0000</string>
-    <string name="fragment_steps_step_goal">Step Goal</string>
-    <string name="fragment_steps_step_unit">Steps</string>
-    <string name="fragment_steps_distance_unit">Kms</string>
-    <string name="fragment_steps_calory_unit">Cal</string>
-    <string name="fragment_steps_step_goal_unit">Step goal</string>
 </resources>

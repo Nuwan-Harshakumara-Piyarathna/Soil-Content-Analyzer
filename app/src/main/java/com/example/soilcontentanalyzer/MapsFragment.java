@@ -1,20 +1,11 @@
 package com.example.soilcontentanalyzer;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -24,9 +15,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.example.soilcontentanalyzer.Model.MeasurementModel;
 import com.example.soilcontentanalyzer.helper.MapHelper;
 import com.example.soilcontentanalyzer.helper.MapTypes;
-import com.example.soilcontentanalyzer.helper.Measurement;
 import com.example.soilcontentanalyzer.helper.Path;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,19 +33,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
 public class MapsFragment extends Fragment {
 
-    private double latitudeField;
-    private double longitudeField;
     MapHelper mapHelper;
     GoogleMap gMap;
     Button btn_add_stop;
@@ -74,8 +67,8 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
 
-//            https://github.com/girishnair12345/Google-Maps-V2-library
-//            https://stackoverflow.com/questions/16416041/zoom-to-fit-all-markers-on-map-google-maps-v2
+            //            https://github.com/girishnair12345/Google-Maps-V2-library
+            //            https://stackoverflow.com/questions/16416041/zoom-to-fit-all-markers-on-map-google-maps-v2
             gMap = googleMap;
             if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                     PackageManager.PERMISSION_GRANTED &&
@@ -84,7 +77,7 @@ public class MapsFragment extends Fragment {
                 googleMap.setMyLocationEnabled(true);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
             } else {
-//                Toast.makeText(this, R.string.error_permission_map, Toast.LENGTH_LONG).show();
+                //                Toast.makeText(this, R.string.error_permission_map, Toast.LENGTH_LONG).show();
                 ActivityCompat.requestPermissions(getActivity(), new String[]{
                                 Manifest.permission.ACCESS_FINE_LOCATION,
                                 Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -93,22 +86,9 @@ public class MapsFragment extends Fragment {
             mapHelper = new MapHelper(googleMap);
 
             markers = new ArrayList<>();
-            //To add a marker
-//            Marker m1 = mapHelper.addMarker(7.2906, 80.2168, "Kandy", "", true);
-//            markers.add(m1);
-//            Marker m2 = mapHelper.addMarker(7.29067, 80.21683, "Pilimathalawa", "", true);
-//            markers.add(m2);
-//
-//            To draw a route path
-//            LatLng l1 = new LatLng  (7.2906f,80.2168f);
-//            LatLng l2 = new LatLng  (7.29071f,80.2168f);
-//            LatLng l3 = new LatLng  (7.2907f,80.2169f);
-//            LatLng l4 = new LatLng  (7.29057f,80.216934f);
-//            Polyline line1 = googleMap.addPolyline(new PolylineOptions().add(l1, l2).width(5).color(Color.BLACK));
-//            Polyline line2 = googleMap.addPolyline(new PolylineOptions().add(l2, l3).width(5).color(Color.BLACK));
-//            Polyline line3 = googleMap.addPolyline(new PolylineOptions().add(l3, l4).width(5).color(Color.BLACK));
-//            Polyline line4 = googleMap.addPolyline(new PolylineOptions().add(l4, l1).width(5).color(Color.BLACK));
 
+            //For testing
+            drawPathWithSomeMarkers();
             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
             locationProvider = LocationManager.NETWORK_PROVIDER;
             // I suppressed the missing-permission warning because this wouldn't be executed in my
@@ -117,9 +97,9 @@ public class MapsFragment extends Fragment {
             double userLat = lastKnownLocation.getLatitude();
             double userLong = lastKnownLocation.getLongitude();
             previousPoints.push(new LatLng(userLat, userLong));
-//            Marker m3 = mapHelper.addMarker(userLat, userLong, "My Location", "Nuwan", false);
-//            markers.add(m3);
-//            googleMap.setMyLocationEnabled(true);
+            Marker m3 = mapHelper.addMarker(userLat, userLong, "My Location", "Nuwan", false);
+            //            markers.add(m3);
+            //            googleMap.setMyLocationEnabled(true);
 
             //Set the map type
             mapHelper.setMapType(MapTypes.NORMAL);
@@ -129,7 +109,9 @@ public class MapsFragment extends Fragment {
 
             //Calculate the markers to get their position
             LatLngBounds.Builder b = new LatLngBounds.Builder();
-            b.include(new LatLng(userLat, userLong));
+            for (Marker m : markers) {
+                b.include(m.getPosition());
+            }
             LatLngBounds bounds = b.build();
             //Change the padding as per needed
             int width = getResources().getDisplayMetrics().widthPixels;
@@ -139,6 +121,25 @@ public class MapsFragment extends Fragment {
             googleMap.animateCamera(cu);
         }
     };
+
+    private void drawPathWithSomeMarkers() {
+        // To draw a route path
+        LatLng l1 = new LatLng(7.2906f, 80.2168f);
+        LatLng l2 = new LatLng(7.29071f, 80.2168f);
+        LatLng l3 = new LatLng(7.2907f, 80.2169f);
+        LatLng l4 = new LatLng(7.29057f, 80.216934f);
+        Polyline line1 = gMap.addPolyline(new PolylineOptions().add(l1, l2).width(5).color(Color.BLACK));
+        Polyline line2 = gMap.addPolyline(new PolylineOptions().add(l2, l3).width(5).color(Color.BLACK));
+        Polyline line3 = gMap.addPolyline(new PolylineOptions().add(l3, l4).width(5).color(Color.BLACK));
+        Polyline line4 = gMap.addPolyline(new PolylineOptions().add(l4, l1).width(5).color(Color.BLACK));
+
+
+        // To add a marker
+        Marker m1 = mapHelper.addMarker(7.2906, 80.2168, "Location 1", "", true);
+        markers.add(m1);
+        Marker m2 = mapHelper.addMarker(7.29067, 80.21683, "Location 2", "", true);
+        markers.add(m2);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,7 +151,7 @@ public class MapsFragment extends Fragment {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
-        Toast.makeText(getContext(), "OnCreate",Toast.LENGTH_SHORT);
+        Toast.makeText(getContext(), "OnCreate", Toast.LENGTH_SHORT);
 
     }
 
@@ -159,7 +160,7 @@ public class MapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getContext(), "OnCreateView",Toast.LENGTH_SHORT);
+        Toast.makeText(getContext(), "OnCreateView", Toast.LENGTH_SHORT);
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         btn_add_stop = view.findViewById(R.id.btn_add_stop);
         btn_save = view.findViewById(R.id.btn_save);
@@ -225,7 +226,7 @@ public class MapsFragment extends Fragment {
                 Toast.makeText(getContext(), "Measuring NPK", Toast.LENGTH_SHORT);
 
                 MainActivity.SIZE += 1;
-                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, rand(), rand(), rand()));
+                MainActivity.measurementModels.add(new MeasurementModel(MainActivity.SIZE, rand(), rand(), rand()));
             }
         });
         return view;
@@ -240,7 +241,7 @@ public class MapsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getContext(), "OnViewCreated",Toast.LENGTH_SHORT);
+        Toast.makeText(getContext(), "OnViewCreated", Toast.LENGTH_SHORT);
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);

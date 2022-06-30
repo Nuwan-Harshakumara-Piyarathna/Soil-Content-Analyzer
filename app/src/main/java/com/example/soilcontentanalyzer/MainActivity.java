@@ -7,10 +7,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.soilcontentanalyzer.helper.Measurement;
+import com.example.soilcontentanalyzer.Model.MeasurementModel;
 import com.example.soilcontentanalyzer.utility.NetworkChangeListener;
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
@@ -31,14 +27,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    public static ArrayList<Measurement> measurements = new ArrayList<>();
+    public static ArrayList<MeasurementModel> measurementModels = new ArrayList<MeasurementModel>();
     public static int SIZE = 0;
 
     static BottomNavigationView bottomNav;
@@ -132,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new MapsFragment();
                             break;
                         case R.id.nav_report:
-                            selectedFragment = new ReportFragment();
+                            selectedFragment = new MeasurementFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

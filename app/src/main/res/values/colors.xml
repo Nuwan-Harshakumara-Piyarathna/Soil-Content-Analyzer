@@ -51,4 +51,14 @@
 
     <color name="tableGreen">#96c896</color>
 
+<!--    light to dark-->
+    <color name="white_green">#b7e4c7</color>
+    <color name="light_light_green">#95d5b2</color>
+    <color name="light_green">#74c69d</color>
+    <color name="normal_green">#52b788</color>
+    <color name="dark_green">#40916c</color>
+    <color name="dark_dark_green">#2d6a4f</color>
+    <color name="green_black">#1b4332</color>
+    <color name="dark_green_black">#081c15</color>
+
 </resources>

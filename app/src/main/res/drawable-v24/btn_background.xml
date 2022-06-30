@@ -3,19 +3,19 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="10dp"/>
-            <gradient android:startColor="#232F34" android:angle="0" android:endColor="#344955"/>
+            <gradient android:startColor="@color/green_black" android:angle="0" android:endColor="@color/green_black"/>
         </shape>
     </item>
     <item android:state_hovered="true">
         <shape android:shape="rectangle">
             <corners android:radius="10dp"/>
-            <gradient android:startColor="#232F34" android:angle="0" android:endColor="#344955"/>
+            <gradient android:startColor="@color/green_black" android:angle="0" android:endColor="@color/green_black"/>
         </shape>
     </item>
     <item android:state_enabled="true">
         <shape android:shape="rectangle">
             <corners android:radius="10dp"/>
-            <gradient android:startColor="#344955" android:angle="0" android:endColor="#344955"/>
+            <gradient android:startColor="@color/green_black" android:angle="0" android:endColor="@color/green_black"/>
         </shape>
     </item>
 

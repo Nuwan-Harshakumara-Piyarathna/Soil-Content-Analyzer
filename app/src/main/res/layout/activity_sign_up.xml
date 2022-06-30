@@ -7,7 +7,7 @@
     tools:context=".SignUpActivity"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#344955">
+    android:background="@color/green_black">
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
@@ -28,10 +28,10 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="115dp"
+                    android:layout_height="130dp"
                     android:contentDescription="content_description_media"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/quizme1" />
+                    app:srcCompat="@drawable/logo2" />
 
                 <TextView
                     android:id="@+id/hello"
@@ -125,7 +125,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_background"
                     android:text="@string/sign_button"
-                    android:textColor="#F9AA33"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:onClick="submitReg"/>
             </LinearLayout>
