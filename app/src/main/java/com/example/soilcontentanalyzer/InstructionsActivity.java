@@ -2,6 +2,7 @@ package com.example.soilcontentanalyzer;
 
 import android.app.Activity;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
@@ -99,10 +100,16 @@ public class InstructionsActivity extends Activity {
     private void prepareListData() {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings",Activity.MODE_PRIVATE);
+        String language = sharedPreferences.getString("My_Lang","");
+        int isSinhala = 0;
+        if (language != null && language.equals("si")) {
+            isSinhala = 1;
+        }
 
         List<String> instruction1, instruction2, instruction3, instruction4, instruction5, instruction6, instruction7, instruction8, instruction9, instruction10, instruction11;
 
-        if (LoginActivity.isSinhala == 0) {
+        if (isSinhala == 0) {
             // Adding header data
             listDataHeader.add(getResources().getString(R.string.instructions_activity_header_1));
             listDataHeader.add(getResources().getString(R.string.instructions_activity_header_2));
@@ -141,17 +148,17 @@ public class InstructionsActivity extends Activity {
             instruction11.add(getResources().getString(R.string.instructions_activity_header_11_child_data));
         } else {
             // Adding header data
-            listDataHeader.add("ස්මාර්ට් NPK මීටර ජංගම යෙදුම වෙත උපාංගය සම්බන්ධ කරන්නේ කෙසේද?");
-            listDataHeader.add("NPK යන්නෙන් අදහස් කරන්නේ කුමක්ද? එය වැදගත් වන්නේ ඇයි?");
+            listDataHeader.add("ස්මාර්ට් NPK යෙදුම වෙත උපාංගය සම්බන්ධ කරන්නේ කෙසේද?");
+            listDataHeader.add("NPK යන්නෙන් අදහස් කරන්නේ කුමක්ද? එය වැදගත් ඇයි?");
             listDataHeader.add("ක්ෂේත්ර සිතියම නිර්මාණය කරන්නේ කෙසේද?");
-            listDataHeader.add("ක්ෂේත්රයේ නිශ්චිත ස්ථානයක NPK අගයන් මැනිය හැක්කේ කෙසේද?");
+            listDataHeader.add("ක්ෂේත්රයේ ස්ථානයක NPK අගයන් මනින්නේ කෙසේද?");
             listDataHeader.add("උපාංගය මගින් මනිනු ලබන දත්ත වලට කුමක් සිදුවේද?");
             listDataHeader.add("මිනුම් සඳහා වාර්තාව බලන්නේ කෙසේද?");
             listDataHeader.add("මට ස්ථාන කීයක් මිනුම් ගත හැකිද?");
             listDataHeader.add("ක්ෂේත්ර සිතියම සහ සියලු මිනුම් ඉවත් කරන්නේ කෙසේද?");
             listDataHeader.add("පෞද්ගලිකත්වය");
             listDataHeader.add("ඔබ අපගේ යෙදුමට කැමතිද?");
-            listDataHeader.add("යෙදුම තුළ අසාමාන්ය දෙයක් සිදු වන බව මා දුටුවහොත් මා කුමක් කළ යුතුද?");
+            listDataHeader.add("යෙදුම තුළ අසාමාන්ය දෙයක් දුටුවහොත් මා කුමක් කළ යුතුද?");
 
             // Adding child data
             instruction1 = new ArrayList<>();

@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     LoadingDialog loadDialog;
     Button button;
     TextView languageButton;
-    public static int isSinhala = 0;
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
@@ -141,13 +140,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(i == 0){
-                    isSinhala = 0;
                     setLocate("en");
                     Log.e("lan","en");
                     recreate();
                 }
                 if(i == 1){
-                    isSinhala = 1;
                     setLocate("si");
                     Log.e("lan","si");
                     recreate();
@@ -171,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = getSharedPreferences("Settings",MODE_PRIVATE).edit();
         editor.putString("My_Lang",language);
+        Log.e("My_Lang", language);
         editor.apply();
 
     }
@@ -214,6 +212,13 @@ public class LoginActivity extends AppCompatActivity {
 
         userText = userName.getText().toString().trim();
         passText = password.getText().toString().trim();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings",Activity.MODE_PRIVATE);
+        String language = sharedPreferences.getString("My_Lang","");
+        int isSinhala = 0;
+        if (language != null && language.equals("si")) {
+            isSinhala = 1;
+        }
 
         if (userText.isEmpty()) {
             user.setError(getString(R.string.username_error));
@@ -329,6 +334,13 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             ld.dismissDialog();
+            SharedPreferences sharedPreferences = getSharedPreferences("Settings",Activity.MODE_PRIVATE);
+            String language = sharedPreferences.getString("My_Lang","");
+            int isSinhala = 0;
+            if (language != null && language.equals("si")) {
+                isSinhala = 1;
+            }
+
             if(s==null){
                 Toast toast;
                 if(isSinhala == 0) {
