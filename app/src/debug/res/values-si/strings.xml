@@ -102,4 +102,8 @@
     <!--Report Fragment-->
     <string name="report_instructions">තෝරාගත් ස්ථානවල NPK මිනුම් සඳහා වාර්තාව බලන්න</string>
     <string name="location">ස්ථානය</string>
+    <string name="clear_all">සියලුම දත්ත ඉවත් කරන්න</string>
+
+    <!--Pop up Activity-->
+    <string name="pop_title">සිතියම් යාවත්කාලීන සාර්ථකව සුරකින ලදී</string>
 </resources>

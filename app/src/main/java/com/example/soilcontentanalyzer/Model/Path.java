@@ -1,4 +1,4 @@
-package com.example.soilcontentanalyzer.helper;
+package com.example.soilcontentanalyzer.Model;
 
 public class Path {
     private double latitudeP1;

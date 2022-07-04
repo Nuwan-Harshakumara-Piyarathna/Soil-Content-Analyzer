@@ -1,19 +1,31 @@
 package com.example.soilcontentanalyzer;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
-import com.example.soilcontentanalyzer.Model.MeasurementModel;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import com.example.soilcontentanalyzer.adapters.MeasurementAdapter;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +45,8 @@ public class MeasurementFragment extends Fragment {
 
     RecyclerView recyclerView;
     MeasurementAdapter measurementAdapter;
+    Button btn_clear_all;
+    LoadingDialog loadDialog;
 
     public MeasurementFragment() {
         // Required empty public constructor
@@ -71,11 +85,73 @@ public class MeasurementFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_measurement, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_measured_values);
-        measurementAdapter = new MeasurementAdapter(getContext(), MainActivity.measurementModels);
+        measurementAdapter = new MeasurementAdapter(getContext(), MainActivity.measurements);
         recyclerView.setAdapter(measurementAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        btn_clear_all = view.findViewById(R.id.btn_clear_all);
+        if(MainActivity.measurements.size() > 0) {
+            btn_clear_all.setVisibility(View.VISIBLE);
+        }
 
+        btn_clear_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Clearing all map data", Toast.LENGTH_SHORT);
+                    loadDialog = new LoadingDialog(getActivity());
+                    loadDialog.startLoadingDialog();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            doDeleteRequest();
+                        }
+                    }).start();
+            }
+        });
         return view;
+    }
+
+    private void doDeleteRequest() {
+        Log.d("Okhttp3:", "doDeleteRequest function called");
+        SharedPreferences pref = getContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String baseURL =pref.getString("baseURL",null);
+        String url = baseURL + "/map/delete";
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // connect timeout
+                .writeTimeout(30, TimeUnit.SECONDS) // write timeout
+                .readTimeout(30, TimeUnit.SECONDS) // read timeout
+                .build();
+
+        Request request = new Request.Builder().url(url).delete().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            Log.d("Okhttp3:", "request done, got the response");
+            Log.d("Okhttp3:", response.body().string());
+            final String toast_message;
+            loadDialog.dismissDialog();
+            if (response.code() == 200){
+                toast_message = "Successfully cleared Map data";
+                MainActivity.measurements.clear();
+                MainActivity.paths.clear();
+                MainActivity.CHANGED = false;
+                btn_clear_all.setVisibility(View.GONE);
+            }
+            else {
+                toast_message = "Something Went Wrong";
+            }
+            if (getContext() != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Log.d("Okhttp3:", toast_message);
+                        Toast.makeText(getContext(), toast_message, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

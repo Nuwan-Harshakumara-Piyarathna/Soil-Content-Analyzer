@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.soilcontentanalyzer.Model.MeasurementModel;
+import com.example.soilcontentanalyzer.Model.Measurement;
 import com.example.soilcontentanalyzer.R;
 
 import java.util.List;
@@ -17,11 +17,11 @@ import java.util.List;
 public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.ViewHolder> {
 
     Context context;
-    List<MeasurementModel> measurementModelList;
+    List<Measurement> measurementList;
 
-    public MeasurementAdapter(Context context, List<MeasurementModel> measurementModelList) {
+    public MeasurementAdapter(Context context, List<Measurement> measurementList) {
         this.context = context;
-        this.measurementModelList = measurementModelList;
+        this.measurementList = measurementList;
     }
 
     @NonNull
@@ -33,8 +33,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if(measurementModelList != null && measurementModelList.size() > 0) {
-            MeasurementModel model = measurementModelList.get(position);
+        if(measurementList != null && measurementList.size() > 0) {
+            Measurement model = measurementList.get(position);
             holder.measurement_id.setText(model.getLocation());
             holder.measurement_N.setText(model.getN());
             holder.measurement_P.setText(model.getP());
@@ -46,7 +46,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
     @Override
     public int getItemCount() {
-        return measurementModelList.size();
+        return measurementList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

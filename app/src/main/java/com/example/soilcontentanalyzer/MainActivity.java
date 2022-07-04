@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -26,11 +25,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.soilcontentanalyzer.Model.MeasurementModel;
+import com.example.soilcontentanalyzer.Model.Measurement;
+import com.example.soilcontentanalyzer.Model.Path;
 import com.example.soilcontentanalyzer.utility.NetworkChangeListener;
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
 import com.fangxu.allangleexpandablebutton.ButtonEventListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -41,13 +42,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    public static ArrayList<MeasurementModel> measurementModels = new ArrayList<MeasurementModel>();
+    public static ArrayList<Measurement> measurements = new ArrayList<Measurement>();
+    public static ArrayList<Path> paths = new ArrayList<>();
+    public static Stack<LatLng> previousPoints = new Stack<>();
+    public static boolean CHANGED = false;
     public static int SIZE = 0;
 
     static BottomNavigationView bottomNav;

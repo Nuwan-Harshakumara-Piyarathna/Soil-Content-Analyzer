@@ -100,4 +100,9 @@ We want to inform users of this Service that these third parties have access to 
     <!--Report Fragment-->
     <string name="report_instructions">View the report for the NPK measurements of the selected locations</string>
     <string name="location">Location</string>
+    <string name="clear_all">Clear All</string>
+
+
+    <!--Pop up Activity-->
+    <string name="pop_title">Map Updates Saved Successfully</string>
 </resources>

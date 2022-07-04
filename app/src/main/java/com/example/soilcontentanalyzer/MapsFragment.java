@@ -4,11 +4,18 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +28,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.soilcontentanalyzer.Model.MeasurementModel;
+import com.example.soilcontentanalyzer.Model.Measurement;
 import com.example.soilcontentanalyzer.helper.MapHelper;
 import com.example.soilcontentanalyzer.helper.MapTypes;
-import com.example.soilcontentanalyzer.helper.Path;
+import com.example.soilcontentanalyzer.Model.Path;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,23 +43,38 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class MapsFragment extends Fragment {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class MapsFragment extends Fragment implements LocationListener {
 
     MapHelper mapHelper;
     GoogleMap gMap;
     Button btn_add_stop;
     Button btn_save;
     Button btn_measure;
-    ArrayList<Path> paths = new ArrayList<>();
-    Stack<LatLng> previousPoints = new Stack<>();
     LocationManager locationManager;
     String locationProvider;
     public static int locationNo = 1;
     ArrayList<Marker> markers;
+    LoadingDialog loadDialog;
+    public double userLat;
+    public double userLong;
+    public Criteria criteria;
+    public String bestProvider;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -93,10 +115,11 @@ public class MapsFragment extends Fragment {
             locationProvider = LocationManager.NETWORK_PROVIDER;
             // I suppressed the missing-permission warning because this wouldn't be executed in my
             // case without location services being enabled
-            @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-            double userLat = lastKnownLocation.getLatitude();
-            double userLong = lastKnownLocation.getLongitude();
-            previousPoints.push(new LatLng(userLat, userLong));
+//            @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+//            double userLat = lastKnownLocation.getLatitude();
+//            double userLong = lastKnownLocation.getLongitude();
+            getCurrentLocation();
+            MainActivity.previousPoints.push(new LatLng(userLat, userLong));
             Marker m3 = mapHelper.addMarker(userLat, userLong, "My Location", "Nuwan", false);
             //            markers.add(m3);
             //            googleMap.setMyLocationEnabled(true);
@@ -123,6 +146,8 @@ public class MapsFragment extends Fragment {
     };
 
     private void drawPathWithSomeMarkers() {
+        //TODO : remove after testing real path drawing
+
         // To draw a route path
         LatLng l1 = new LatLng(7.2906f, 80.2168f);
         LatLng l2 = new LatLng(7.29071f, 80.2168f);
@@ -139,6 +164,14 @@ public class MapsFragment extends Fragment {
         markers.add(m1);
         Marker m2 = mapHelper.addMarker(7.29067, 80.21683, "Location 2", "", true);
         markers.add(m2);
+
+        if (! MainActivity.CHANGED) {
+            MainActivity.paths.add(new Path(l1.latitude,l1.longitude,l2.latitude,l2.longitude));
+            MainActivity.paths.add(new Path(l2.latitude,l2.longitude,l3.latitude,l3.longitude));
+            MainActivity.paths.add(new Path(l3.latitude,l3.longitude,l4.latitude,l4.longitude));
+            MainActivity.paths.add(new Path(l4.latitude,l4.longitude,l1.latitude,l1.longitude));
+            MainActivity.CHANGED = true;
+        }
     }
 
     @Override
@@ -173,13 +206,15 @@ public class MapsFragment extends Fragment {
                     locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                     locationProvider = LocationManager.NETWORK_PROVIDER;
                 }
-                @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-                double userLat = lastKnownLocation.getLatitude();
-                double userLong = lastKnownLocation.getLongitude();
-                LatLng latLng1 = previousPoints.pop();
+                getCurrentLocation();
+//                @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+//                double userLat = lastKnownLocation.getLatitude();
+//                double userLong = lastKnownLocation.getLongitude();
+                LatLng latLng1 = MainActivity.previousPoints.pop();
                 LatLng latLng2 = new LatLng(userLat, userLong);
-                previousPoints.push(latLng2);
-                paths.add(new Path(latLng1.latitude, latLng1.longitude, userLat, userLong));
+                MainActivity.previousPoints.push(latLng2);
+                MainActivity.paths.add(new Path(latLng1.latitude, latLng1.longitude, userLat, userLong));
+                MainActivity.CHANGED = true;
                 Polyline line1 = gMap.addPolyline(new PolylineOptions().add(latLng1, latLng2).width(5).color(Color.BLACK));
                 Toast.makeText(getContext(), "Added a stop", Toast.LENGTH_SHORT);
             }
@@ -188,8 +223,19 @@ public class MapsFragment extends Fragment {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:
                 Toast.makeText(getContext(), "Saving map", Toast.LENGTH_SHORT);
+                if (!MainActivity.CHANGED) {
+                    Toast.makeText(getContext(), "First update the Map", Toast.LENGTH_SHORT).show();
+                } else {
+                    loadDialog = new LoadingDialog(getActivity());
+                    loadDialog.startLoadingDialog();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            doPostRequest();
+                        }
+                    }).start();
+                }
             }
         });
 
@@ -207,9 +253,10 @@ public class MapsFragment extends Fragment {
                     locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                     locationProvider = LocationManager.NETWORK_PROVIDER;
                 }
-                @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-                double userLat = lastKnownLocation.getLatitude();
-                double userLong = lastKnownLocation.getLongitude();
+                getCurrentLocation();
+//                @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+//                double userLat = lastKnownLocation.getLatitude();
+//                double userLong = lastKnownLocation.getLongitude();
                 Marker marker = mapHelper.addMarker(userLat, userLong, "Location " + locationNo, "", false);
                 locationNo++;
                 markers.add(marker);
@@ -226,10 +273,109 @@ public class MapsFragment extends Fragment {
                 Toast.makeText(getContext(), "Measuring NPK", Toast.LENGTH_SHORT);
 
                 MainActivity.SIZE += 1;
-                MainActivity.measurementModels.add(new MeasurementModel(MainActivity.SIZE, rand(), rand(), rand()));
+                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, rand(), rand(), rand(), userLat, userLong));
+                MainActivity.CHANGED = true;
             }
         });
         return view;
+    }
+
+    private void doPostRequest() {
+        Log.d("Okhttp3:", "doPostRequest function called");
+        SharedPreferences pref = getContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String baseURL = pref.getString("baseURL", null);
+        String url = baseURL + "/map/add";
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // connect timeout
+                .writeTimeout(30, TimeUnit.SECONDS) // write timeout
+                .readTimeout(30, TimeUnit.SECONDS) // read timeout
+                .build();
+
+        MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+
+        JSONArray paths = new JSONArray();
+        for (Path path : MainActivity.paths) {
+            JSONObject jo = new JSONObject();
+            try {
+                jo.put("latitudeP1", path.getLatitudeP1());
+                jo.put("longitudeP1", path.getLongitudeP1());
+                jo.put("latitudeP2", path.getLatitudeP2());
+                jo.put("longitudeP2", path.getLongitudeP2());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            paths.put(jo);
+        }
+
+        JSONArray measurements = new JSONArray();
+        for (Measurement measurement : MainActivity.measurements) {
+            JSONObject jo = new JSONObject();
+            try {
+                jo.put("location", measurement.getLocation());
+                jo.put("N", measurement.getN());
+                jo.put("P", measurement.getP());
+                jo.put("K", measurement.getK());
+                jo.put("latitude", measurement.getLatitude());
+                jo.put("longitude", measurement.getLongitude());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            measurements.put(jo);
+        }
+
+        JSONObject actualData = new JSONObject();
+        try {
+            actualData.put("paths", paths);
+            actualData.put("measurements", measurements);
+        } catch (JSONException e) {
+            Log.d("Okhttp3:", "JSON Exception");
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(JSON, actualData.toString());
+        Log.d("Okhttp3:", "Requestbody created");
+        Log.d("Okhttp3:", "body = \n" + body.toString());
+        Log.d("Okhttp3:", "actualData = \n" + actualData.toString());
+        String jwt = pref.getString("jwt", null);
+        Log.d("Okhttp3:", "jwt = " + jwt);
+        Request request = new Request.Builder()
+                .header("Authorization", "Bearer " + jwt)
+                .url(url)
+                .post(body)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            Log.d("Okhttp3:", "request done, got the response");
+            Log.d("Okhttp3:", response.body().string());
+
+
+            final String toast_message;
+            loadDialog.dismissDialog();
+            if (response.code() == 200) {
+                startActivity(new Intent(getContext(), PopUpSubmission.class));
+            } else {
+                toast_message = "Something Went Wrong";
+                if (getContext() != null) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), toast_message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+
+        } catch (IOException e) {
+            Log.d("Okhttp3:", "IOEXCEPTION while request");
+            e.printStackTrace();
+        }
+
     }
 
     private double rand() {
@@ -250,4 +396,77 @@ public class MapsFragment extends Fragment {
         }
     }
 
+    public static boolean isLocationEnabled(Context context) {
+        return ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @SuppressLint("MissingPermission")
+    protected void getCurrentLocation() {
+//        https://stackoverflow.com/questions/32290045/error-invoke-virtual-method-double-android-location-location-getlatitude-on
+        if (isLocationEnabled(getContext())) {
+            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            criteria = new Criteria();
+            bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
+            //You can still do this if you like, you might get lucky:
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if (location != null) {
+                Log.e("TAG", "GPS is on");
+                userLat = location.getLatitude();
+                userLong = location.getLongitude();
+                Toast.makeText(getContext(), "latitude:" + userLat + " longitude:" + userLong, Toast.LENGTH_SHORT).show();
+            }
+            else{
+                //This is what you need:
+                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+            }
+        }
+        else
+        {
+            //prompt user to enable location....
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        //Hey, a non null location! Sweet!
+
+        //remove location callback:
+        locationManager.removeUpdates(this);
+
+        //open the map:
+        userLat = location.getLatitude();
+        userLong = location.getLongitude();
+        Toast.makeText(getContext(), "latitude:" + userLat + " longitude:" + userLong, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull List<Location> locations) {
+
+    }
+
+    @Override
+    public void onFlushComplete(int requestCode) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
+    }
 }
