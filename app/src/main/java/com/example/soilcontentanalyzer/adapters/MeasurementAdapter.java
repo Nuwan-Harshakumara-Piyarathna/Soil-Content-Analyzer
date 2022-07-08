@@ -13,6 +13,7 @@ import com.example.soilcontentanalyzer.MainActivity;
 import com.example.soilcontentanalyzer.Model.Measurement;
 import com.example.soilcontentanalyzer.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.ViewHolder> {
@@ -35,10 +36,11 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if(MainActivity.measurements != null && MainActivity.measurements.size() > 0) {
             Measurement model = MainActivity.measurements.get(position);
+            DecimalFormat df = new DecimalFormat("#.0");
             holder.measurement_id.setText(model.getLocation());
-            holder.measurement_N.setText(model.getN());
-            holder.measurement_P.setText(model.getP());
-            holder.measurement_K.setText(model.getK());
+            holder.measurement_N.setText(df.format(model.getN()));
+            holder.measurement_P.setText(df.format(model.getP()));
+            holder.measurement_K.setText(df.format(model.getK()));
         } else {
             return;
         }

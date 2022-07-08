@@ -36,6 +36,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -173,7 +177,46 @@ public class MainActivity extends AppCompatActivity {
 
         try (Response response = client.newCall(request).execute()) {
             Log.d("Okhttp3:", "request done, got the response");
-            Log.d("Okhttp3:", String.valueOf(response.body()));
+            Log.d("Okhttp3:", response.body().toString());
+            String jsonData = response.body().string();
+            JSONObject jsonObject = new JSONObject(jsonData);
+            JSONArray pathsArray = jsonObject.getJSONArray("paths");
+            JSONArray measurementsArray = jsonObject.getJSONArray("measurements");
+            ArrayList<Path>  loadedPaths = new ArrayList<>();
+            double latitudeP1, longitudeP1, latitudeP2, longitudeP2;
+            for (int i = 0; i < pathsArray.length(); i++) {
+                JSONObject object1 = pathsArray.getJSONObject(i);
+                latitudeP1 = object1.getDouble("latitudeP1");
+                longitudeP1 = object1.getDouble("longitudeP1");
+                latitudeP2 = object1.getDouble("latitudeP2");
+                longitudeP2 = object1.getDouble("longitudeP2");
+                Path path = new Path(latitudeP1, longitudeP1, latitudeP2, longitudeP2);
+                //store the data into the array
+                loadedPaths.add(path);
+            }
+            MainActivity.paths = loadedPaths;
+            if(paths.size() > 0) {
+                Log.e(TAG, "getFieldMap:- Paths size :"+ MainActivity.paths.size());
+                Log.e(TAG, "getFieldMap:- Paths :"+ MainActivity.paths);
+            }
+            ArrayList<Measurement> loadedMeasurements = new ArrayList<>();
+            int location;
+            double N, P, K, latitude, longitude;
+            for (int i = 0; i < measurementsArray.length(); i++) {
+                JSONObject object2 = measurementsArray.getJSONObject(i);
+                location = object2.getInt("location");
+                N = object2.getDouble("N");
+                P = object2.getDouble("P");
+                K = object2.getDouble("K");
+                latitude = object2.getDouble("latitude");
+                longitude = object2.getDouble("longitude");
+
+                Measurement measurement = new Measurement(location, N, P, K, latitude, longitude);
+                //store the data into the array
+                loadedMeasurements.add(measurement);
+            }
+            MainActivity.measurements = loadedMeasurements;
+
             final String toast_message;
             if (response.code() == 200){
                 toast_message = "Successfully Loaded Map data";
@@ -192,9 +235,13 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
             loadDialog.dismissDialog();
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             loadDialog.dismissDialog();
-            Toast.makeText(getApplicationContext(), "Something Went Wrong", Toast.LENGTH_LONG);
+            this.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
             e.printStackTrace();
         }
     }

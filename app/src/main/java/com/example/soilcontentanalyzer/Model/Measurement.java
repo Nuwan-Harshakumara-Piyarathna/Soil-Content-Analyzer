@@ -1,38 +1,35 @@
 package com.example.soilcontentanalyzer.Model;
 
-import java.text.DecimalFormat;
-
 public class Measurement {
     private int location;
-    private String N;
-    private String P;
-    private String K;
+    private double N;
+    private double P;
+    private double K;
     private double latitude;
     private double longitude;
 
     public Measurement(int location, double n, double p, double k, double latitude, double longitude) {
         this.location = location;
-        DecimalFormat df = new DecimalFormat("#.0");
-        N = df.format(n);
-        P = df.format(p);
-        K = df.format(k);
         this.latitude = latitude;
         this.longitude = longitude;
+        this.N = n;
+        this.P = p;
+        this.K = k;
     }
 
     public String getLocation() {
         return "" + location;
     }
 
-    public String getN() {
+    public double getN() {
         return N;
     }
 
-    public String getP() {
+    public double getP() {
         return P;
     }
 
-    public String getK() {
+    public double getK() {
         return K;
     }
 
@@ -42,5 +39,17 @@ public class Measurement {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "Measurement{" +
+                "location=" + location +
+                ", N=" + N +
+                ", P=" + P +
+                ", K=" + K +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
     }
 }

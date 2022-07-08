@@ -28,4 +28,14 @@ public class Path {
     public double getLongitudeP2() {
         return longitudeP2;
     }
+
+    @Override
+    public String toString() {
+        return "Path{" +
+                "latitudeP1=" + latitudeP1 +
+                ", longitudeP1=" + longitudeP1 +
+                ", latitudeP2=" + latitudeP2 +
+                ", longitudeP2=" + longitudeP2 +
+                '}';
+    }
 }
