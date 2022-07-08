@@ -20,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +45,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Measurement> measurements = new ArrayList<Measurement>();
     public static ArrayList<Path> paths = new ArrayList<>();
     public static Stack<LatLng> previousPoints = new Stack<>();
+    //set this CHANGED variable to true only if data (measurements and/or paths) is updated
     public static boolean CHANGED = false;
     public static int SIZE = 0;
 
@@ -69,9 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     String TAG = "MainActivity";
     StringBuilder messages;
-
-
-
+    LoadingDialog loadDialog;
 
 
     @Override
@@ -126,8 +131,16 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        loadDialog = new LoadingDialog(this);
+        loadDialog.startLoadingDialog();
+        Log.e("MainActivity","getting Field Map");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getFieldMap();
+            }
+        }).start();
+        Log.e("MainActivity","got the Field Map");
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -139,6 +152,50 @@ public class MainActivity extends AppCompatActivity {
             Intent enableBtIntent = new
                     Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+    }
+
+    private void getFieldMap() {
+        Log.d("Okhttp3:", "getFieldMap function called");
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String baseURL =pref.getString("baseURL",null);
+        String url = baseURL + "/map/find";
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // connect timeout
+                .writeTimeout(30, TimeUnit.SECONDS) // write timeout
+                .readTimeout(30, TimeUnit.SECONDS) // read timeout
+                .build();
+
+        String jwt = pref.getString("jwt", null);
+        Log.d("Okhttp3:", "jwt = " + jwt);
+        Request request = new Request.Builder().header("Authorization", "Bearer " + jwt).url(url).get().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            Log.d("Okhttp3:", "request done, got the response");
+            Log.d("Okhttp3:", String.valueOf(response.body()));
+            final String toast_message;
+            if (response.code() == 200){
+                toast_message = "Successfully Loaded Map data";
+            }
+            else {
+                toast_message = "Something Went Wrong ";
+            }
+            if (getApplicationContext() != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Log.d("Okhttp3:", toast_message);
+                        Toast.makeText(getApplicationContext(), toast_message, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            loadDialog.dismissDialog();
+        } catch (IOException e) {
+            loadDialog.dismissDialog();
+            Toast.makeText(getApplicationContext(), "Something Went Wrong", Toast.LENGTH_LONG);
+            e.printStackTrace();
         }
     }
 

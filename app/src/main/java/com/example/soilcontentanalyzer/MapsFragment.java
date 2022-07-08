@@ -372,7 +372,10 @@ public class MapsFragment extends Fragment implements LocationListener {
 
 
         } catch (IOException e) {
+            loadDialog.dismissDialog();
             Log.d("Okhttp3:", "IOEXCEPTION while request");
+            String toast_message = "Something Went Wrong";
+            Toast.makeText(getContext(), toast_message, Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 

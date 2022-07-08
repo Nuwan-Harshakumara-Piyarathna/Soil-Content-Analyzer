@@ -1,5 +1,6 @@
 package com.example.soilcontentanalyzer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -85,7 +86,7 @@ public class MeasurementFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_measurement, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_measured_values);
-        measurementAdapter = new MeasurementAdapter(getContext(), MainActivity.measurements);
+        measurementAdapter = new MeasurementAdapter(getContext());
         recyclerView.setAdapter(measurementAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -111,6 +112,7 @@ public class MeasurementFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void doDeleteRequest() {
         Log.d("Okhttp3:", "doDeleteRequest function called");
         SharedPreferences pref = getContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -123,11 +125,13 @@ public class MeasurementFragment extends Fragment {
                 .readTimeout(30, TimeUnit.SECONDS) // read timeout
                 .build();
 
-        Request request = new Request.Builder().url(url).delete().build();
+        String jwt = pref.getString("jwt", null);
+        Log.d("Okhttp3:", "jwt = " + jwt);
+        Request request = new Request.Builder().header("Authorization", "Bearer " + jwt).url(url).delete().build();
 
         try (Response response = client.newCall(request).execute()) {
             Log.d("Okhttp3:", "request done, got the response");
-            Log.d("Okhttp3:", response.body().string());
+            Log.d("Okhttp3:", String.valueOf(response.body()));
             final String toast_message;
             loadDialog.dismissDialog();
             if (response.code() == 200){
@@ -135,10 +139,17 @@ public class MeasurementFragment extends Fragment {
                 MainActivity.measurements.clear();
                 MainActivity.paths.clear();
                 MainActivity.CHANGED = false;
-                btn_clear_all.setVisibility(View.GONE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btn_clear_all.setVisibility(View.GONE);
+                        measurementAdapter.clearAll();
+                    }
+                });
             }
             else {
-                toast_message = "Something Went Wrong";
+                Log.e("Okhttp3:", String.valueOf(response.body()));
+                toast_message = "Something Went Wrong ";
             }
             if (getContext() != null) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -151,7 +162,10 @@ public class MeasurementFragment extends Fragment {
                 });
             }
         } catch (IOException e) {
+            loadDialog.dismissDialog();
+            Toast.makeText(getContext(), "Something Went Wrong", Toast.LENGTH_LONG);
             e.printStackTrace();
         }
     }
+
 }
