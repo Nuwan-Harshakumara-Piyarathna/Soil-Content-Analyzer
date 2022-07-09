@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/green_black"
-        android:layout_marginRight="3dp"
-        android:weightSum="3"
+        android:weightSum="9"
         >
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -22,40 +21,36 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="339dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:background="@color/green_black"
             app:title="Smart NPK Meter"
+            android:layout_weight="1"
             app:titleTextColor="@color/white" />
 
-        <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
-            android:id="@+id/button_expandable_90_90"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:scaleType="center"
-            app:aebAnimDurationMillis="175"
-            app:aebBlurBackground="true"
-            app:aebButtonElevation="@dimen/fragment_steps_expandable_button_elevation"
-            app:aebButtonGapDp="@dimen/fragment_steps_expandable_button_gap"
-            app:aebEndAngleDegree="-90"
-            app:aebIsSelectionMode="false"
-            app:aebMainButtonRotateAnimDurationMillis="300"
-            app:aebMainButtonRotateDegree="-135"
-            app:aebMainButtonSizeDp="@dimen/fragment_steps_expandable_button_main_button_size"
-            app:aebRippleEffect="true"
-            app:aebStartAngleDegree="-90"
-            app:aebSubButtonSizeDp="@dimen/fragment_steps_expandable_button_sub_button_size" />
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/green_black"
-            android:orientation="horizontal"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_weight="8"
+            android:gravity="center">
 
+
+            <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
+                android:id="@+id/button_expandable_90_90"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="center"
+                app:aebAnimDurationMillis="175"
+                app:aebBlurBackground="true"
+                app:aebButtonElevation="@dimen/fragment_steps_expandable_button_elevation"
+                app:aebButtonGapDp="@dimen/fragment_steps_expandable_button_gap"
+                app:aebEndAngleDegree="-90"
+                app:aebIsSelectionMode="false"
+                app:aebMainButtonRotateAnimDurationMillis="300"
+                app:aebMainButtonRotateDegree="-135"
+                app:aebMainButtonSizeDp="@dimen/fragment_steps_expandable_button_main_button_size"
+                app:aebRippleEffect="true"
+                app:aebStartAngleDegree="-90"
+                app:aebSubButtonSizeDp="@dimen/fragment_steps_expandable_button_sub_button_size" />
         </LinearLayout>
 
 

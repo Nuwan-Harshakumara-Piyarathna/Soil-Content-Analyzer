@@ -61,6 +61,7 @@ import okhttp3.Response;
 
 public class MapsFragment extends Fragment implements LocationListener {
 
+    private static final String TAG = "MAPSFragment";
     MapHelper mapHelper;
     GoogleMap gMap;
     Button btn_add_stop;
@@ -71,8 +72,8 @@ public class MapsFragment extends Fragment implements LocationListener {
     public static int locationNo = 1;
     ArrayList<Marker> markers;
     LoadingDialog loadDialog;
-    public double userLat;
-    public double userLong;
+    public double latitude;
+    public double longitude;
     public Criteria criteria;
     public String bestProvider;
 
@@ -119,8 +120,8 @@ public class MapsFragment extends Fragment implements LocationListener {
 //            double userLat = lastKnownLocation.getLatitude();
 //            double userLong = lastKnownLocation.getLongitude();
             getCurrentLocation();
-            MainActivity.previousPoints.push(new LatLng(userLat, userLong));
-            Marker m3 = mapHelper.addMarker(userLat, userLong, "My Location", "Nuwan", false);
+            MainActivity.previousPoints.push(new LatLng(latitude, longitude));
+            Marker m3 = mapHelper.addMarker(latitude, longitude, "My Location", "Nuwan", false);
             //            markers.add(m3);
             //            googleMap.setMyLocationEnabled(true);
 
@@ -211,9 +212,9 @@ public class MapsFragment extends Fragment implements LocationListener {
 //                double userLat = lastKnownLocation.getLatitude();
 //                double userLong = lastKnownLocation.getLongitude();
                 LatLng latLng1 = MainActivity.previousPoints.pop();
-                LatLng latLng2 = new LatLng(userLat, userLong);
+                LatLng latLng2 = new LatLng(latitude, longitude);
                 MainActivity.previousPoints.push(latLng2);
-                MainActivity.paths.add(new Path(latLng1.latitude, latLng1.longitude, userLat, userLong));
+                MainActivity.paths.add(new Path(latLng1.latitude, latLng1.longitude, latitude, longitude));
                 MainActivity.CHANGED = true;
                 Polyline line1 = gMap.addPolyline(new PolylineOptions().add(latLng1, latLng2).width(5).color(Color.BLACK));
                 Toast.makeText(getContext(), "Added a stop", Toast.LENGTH_SHORT);
@@ -254,10 +255,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                     locationProvider = LocationManager.NETWORK_PROVIDER;
                 }
                 getCurrentLocation();
-//                @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-//                double userLat = lastKnownLocation.getLatitude();
-//                double userLong = lastKnownLocation.getLongitude();
-                Marker marker = mapHelper.addMarker(userLat, userLong, "Location " + locationNo, "", false);
+                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, "", false);
                 locationNo++;
                 markers.add(marker);
                 LatLngBounds.Builder b = new LatLngBounds.Builder();
@@ -273,7 +271,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                 Toast.makeText(getContext(), "Measuring NPK", Toast.LENGTH_SHORT);
 
                 MainActivity.SIZE += 1;
-                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, rand(), rand(), rand(), userLat, userLong));
+                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, rand(), rand(), rand(), latitude, longitude));
                 MainActivity.CHANGED = true;
             }
         });
@@ -295,6 +293,7 @@ public class MapsFragment extends Fragment implements LocationListener {
         MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
         JSONArray paths = new JSONArray();
+        Log.e(TAG, "doPostRequest: Uploading Measurements : " + MainActivity.measurements);
         for (Path path : MainActivity.paths) {
             JSONObject jo = new JSONObject();
             try {
@@ -314,9 +313,9 @@ public class MapsFragment extends Fragment implements LocationListener {
             JSONObject jo = new JSONObject();
             try {
                 jo.put("location", measurement.getLocation());
-                jo.put("N", measurement.getN());
-                jo.put("P", measurement.getP());
-                jo.put("K", measurement.getK());
+                jo.put("n", measurement.getN());
+                jo.put("p", measurement.getP());
+                jo.put("k", measurement.getK());
                 jo.put("latitude", measurement.getLatitude());
                 jo.put("longitude", measurement.getLongitude());
 
@@ -416,9 +415,40 @@ public class MapsFragment extends Fragment implements LocationListener {
             Location location = locationManager.getLastKnownLocation(bestProvider);
             if (location != null) {
                 Log.e("TAG", "GPS is on");
-                userLat = location.getLatitude();
-                userLong = location.getLongitude();
-                Toast.makeText(getContext(), "latitude:" + userLat + " longitude:" + userLong, Toast.LENGTH_SHORT).show();
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                Toast.makeText(getContext(), "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+            }
+            else{
+                //This is what you need:
+                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+            }
+        }
+        else
+        {
+            //prompt user to enable location....
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    protected void getCurrentLocation_new() {
+//        https://stackoverflow.com/questions/32290045/error-invoke-virtual-method-double-android-location-location-getlatitude-on
+        if (isLocationEnabled(getContext())) {
+            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            criteria = new Criteria();
+            bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
+            //You can still do this if you like, you might get lucky:
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if (location != null) {
+                Log.e("TAG", "GPS is on");
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                Toast.makeText(getContext(), "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
             }
             else{
                 //This is what you need:
@@ -443,9 +473,9 @@ public class MapsFragment extends Fragment implements LocationListener {
         locationManager.removeUpdates(this);
 
         //open the map:
-        userLat = location.getLatitude();
-        userLong = location.getLongitude();
-        Toast.makeText(getContext(), "latitude:" + userLat + " longitude:" + userLong, Toast.LENGTH_SHORT).show();
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        Toast.makeText(getContext(), "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
     }
 
     @Override

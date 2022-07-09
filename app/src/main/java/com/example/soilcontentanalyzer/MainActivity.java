@@ -205,9 +205,9 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < measurementsArray.length(); i++) {
                 JSONObject object2 = measurementsArray.getJSONObject(i);
                 location = object2.getInt("location");
-                N = object2.getDouble("N");
-                P = object2.getDouble("P");
-                K = object2.getDouble("K");
+                N = object2.getDouble("n");
+                P = object2.getDouble("p");
+                K = object2.getDouble("k");
                 latitude = object2.getDouble("latitude");
                 longitude = object2.getDouble("longitude");
 
@@ -216,7 +216,10 @@ public class MainActivity extends AppCompatActivity {
                 loadedMeasurements.add(measurement);
             }
             MainActivity.measurements = loadedMeasurements;
-
+            if(measurements.size() > 0) {
+                Log.e(TAG, "getFieldMap:- Measurements size :"+ MainActivity.measurements.size());
+                Log.e(TAG, "getFieldMap:- Measurements :"+ MainActivity.measurements);
+            }
             final String toast_message;
             if (response.code() == 200){
                 toast_message = "Successfully Loaded Map data";
