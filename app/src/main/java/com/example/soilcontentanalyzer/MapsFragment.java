@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,10 +17,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +52,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -121,7 +126,7 @@ public class MapsFragment extends Fragment implements LocationListener {
 //            double userLong = lastKnownLocation.getLongitude();
             getCurrentLocation();
             MainActivity.previousPoints.push(new LatLng(latitude, longitude));
-            Marker m3 = mapHelper.addMarker(latitude, longitude, "My Location", "Nuwan", false);
+//            Marker m3 = mapHelper.addMarker(latitude, longitude, "My Location", "Nuwan", false);
             //            markers.add(m3);
             //            googleMap.setMyLocationEnabled(true);
 
@@ -143,6 +148,35 @@ public class MapsFragment extends Fragment implements LocationListener {
             int padding = (int) (width * 0.15);
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
             googleMap.animateCamera(cu);
+            googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+                @Override
+                public View getInfoWindow(Marker arg0) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+
+                    LinearLayout info = new LinearLayout(getContext());
+                    info.setOrientation(LinearLayout.VERTICAL);
+
+                    TextView title = new TextView(getContext());
+                    title.setTextColor(Color.BLACK);
+                    title.setGravity(Gravity.CENTER);
+                    title.setTypeface(null, Typeface.BOLD);
+                    title.setText(marker.getTitle());
+
+                    TextView snippet = new TextView(getContext());
+                    snippet.setTextColor(Color.GRAY);
+                    snippet.setText(marker.getSnippet());
+
+                    info.addView(title);
+                    info.addView(snippet);
+
+                    return info;
+                }
+            });
         }
     };
 
@@ -255,7 +289,14 @@ public class MapsFragment extends Fragment implements LocationListener {
                     locationProvider = LocationManager.NETWORK_PROVIDER;
                 }
                 getCurrentLocation();
-                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, "", false);
+
+                //TODO : get values from device and replace below
+                double value_N = rand();
+                double value_P = rand();
+                double value_K = rand();
+                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, value_N, value_P, value_K, latitude, longitude));
+                DecimalFormat df = new DecimalFormat("#.0");
+                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, String.format("N = %smg/kg\nP = %smg/kg\nK = %smg/kg", df.format(value_N), df.format(value_P), df.format(value_K)), false);
                 locationNo++;
                 markers.add(marker);
                 LatLngBounds.Builder b = new LatLngBounds.Builder();
@@ -271,7 +312,6 @@ public class MapsFragment extends Fragment implements LocationListener {
                 Toast.makeText(getContext(), "Measuring NPK", Toast.LENGTH_SHORT);
 
                 MainActivity.SIZE += 1;
-                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, rand(), rand(), rand(), latitude, longitude));
                 MainActivity.CHANGED = true;
             }
         });

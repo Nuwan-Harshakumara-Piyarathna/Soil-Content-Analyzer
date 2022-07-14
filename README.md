@@ -43,6 +43,12 @@
     <th><img src="screenshots/15.jpeg" alt="loading screenshot"  width="200" height="380"/></th>
     <th><img src="screenshots/16.jpeg" alt="loading screenshot"  width="200" height="380"/></th>
    </tr>
+    <tr>
+    <th><img src="screenshots/17.jpeg" alt="loading screenshot"  width="200" height="380"/></th>
+    <th><img src="screenshots/18.jpeg" alt="loading screenshot"  width="200" height="380"/></th> 
+    <th><img src="screenshots/19.jpeg" alt="loading screenshot"  width="200" height="380"/></th>
+    <th><img src="screenshots/20.jpeg" alt="loading screenshot"  width="200" height="380"/></th>
+   </tr>
 </table>
 <h2>Features</h2>
 <p>Smart NPK Meter has an easy to use interface which can communicate with the farmer in few steps. It shows a map of the area and the measuring position so the farmers get to apply fertilizer to those exact places at a later date. Farmer can create the field map by walking around the land.He/she can select the measurement locations and the device will measure the Nitrogen, Phosphorus, and Potassium concentrations of the soil on the land. The mobile app will monitor the measurement results via a Report. After taking the measurements, the mobile app recommends the locations where the NPK concentration is not enough and suggests how much NPK is needed. Due to different versions of the maps, It makes the life of a farmer easier to find the different N, P, or K measurements once at a time. It also has Sinhala and English language support.</p>
