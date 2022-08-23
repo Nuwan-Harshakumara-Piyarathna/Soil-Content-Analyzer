@@ -21,6 +21,7 @@
         <entry key="app/src/main/res/drawable/radio_selector.xml" value="0.3776041666666667" />
         <entry key="app/src/main/res/drawable/tab_color.xml" value="0.3776041666666667" />
         <entry key="app/src/main/res/drawable/text_color.xml" value="0.3776041666666667" />
+        <entry key="app/src/main/res/layout/activity_color_map.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/activity_instructions.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/activity_instructions_list_view_headers.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/activity_instructions_list_view_values.xml" value="0.3596014492753623" />

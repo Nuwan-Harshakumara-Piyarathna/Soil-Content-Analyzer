@@ -11,12 +11,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +28,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.soilcontentanalyzer.Model.Measurement;
 import com.example.soilcontentanalyzer.Model.Path;
 import com.example.soilcontentanalyzer.utility.NetworkChangeListener;
@@ -151,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     new PathFragment()).commit();
         }
         installButton90to90();
+        checkForUpdates();
 
         if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new
@@ -344,6 +351,63 @@ public class MainActivity extends AppCompatActivity {
                 // showToast("onCollapse");
             }
         });
+    }
+
+    private void checkForUpdates() {
+        Log.e("VERSION CODE",String.valueOf(BuildConfig.VERSION_CODE));
+        Log.e("VERSION NAME",String.valueOf(BuildConfig.VERSION_NAME));
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String baseURL =pref.getString("baseURL",null);
+        String url = baseURL + "/all/version/find";
+
+        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String newerVersion = response.getString("version");
+                            Log.e("BACKEND VERSION",newerVersion);
+                            String currentVersion = String.valueOf(BuildConfig.VERSION_NAME);
+                            if(newerVersion.compareTo(currentVersion) > 0){
+                                android.view.ContextThemeWrapper ctw = new android.view.ContextThemeWrapper(MainActivity.this,R.style.Theme_AlertDialog);
+                                final android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(ctw);
+                                alertDialogBuilder.setTitle("Update Quiz Me");
+                                alertDialogBuilder.setCancelable(false);
+                                alertDialogBuilder.setIcon(R.drawable.playstore1);
+                                alertDialogBuilder.setMessage("Quiz Me recommends that you update to the latest version for a seamless & enhanced performance of the app.");
+                                alertDialogBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        try{
+                                            Log.e("UPDATE TRYCATCH","try");
+                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id="+getPackageName())));
+                                        }
+                                        catch (ActivityNotFoundException e){
+                                            Log.e("UPDATE TRYCATCH","catch");
+                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName())));
+                                        }
+                                    }
+                                });
+                                alertDialogBuilder.show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(request);
+
     }
 
     public void pairDevice(View v) {

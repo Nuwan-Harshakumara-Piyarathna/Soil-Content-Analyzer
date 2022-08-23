@@ -23,6 +23,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ColorMapActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".PopUpSubmission"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme" />

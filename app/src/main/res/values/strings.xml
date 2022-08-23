@@ -105,4 +105,9 @@ We want to inform users of this Service that these third parties have access to 
 
     <!--Pop up Activity-->
     <string name="pop_title">Map Updates Saved Successfully</string>
+    <string name="Generate">Color Maps</string>
+    <string name="title_activity_color_map">ColorMapActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
