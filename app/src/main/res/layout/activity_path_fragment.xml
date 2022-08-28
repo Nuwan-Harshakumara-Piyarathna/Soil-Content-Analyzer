@@ -19,6 +19,29 @@
         android:text="@string/fragment_steps_start_button_text"
         android:textColor="@color/primaryTextColor" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         />
+
+    <TextView
+        android:id="@+id/textViewInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:text="measurements here"
+        android:textColor="@color/primaryTextColor"/>
+
+    <Button
+        android:id="@+id/buttonToggle"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Request Measurements"
+        />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/create_card"
         android:layout_width="match_parent"

@@ -61,4 +61,7 @@
     <color name="green_black">#1b4332</color>
     <color name="dark_green_black">#081c15</color>
 
+
+    <color name="colorOff">#000000</color>
+    <color name="colorOn">#FF8800</color>
 </resources>
