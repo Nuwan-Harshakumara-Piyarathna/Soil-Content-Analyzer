@@ -67,18 +67,18 @@ import okhttp3.Response;
 public class MapsFragment extends Fragment implements LocationListener {
 
     private static final String TAG = "MAPSFragment";
-    MapHelper mapHelper;
-    GoogleMap gMap;
+    public static MapHelper mapHelper;
+    static GoogleMap gMap;
     Button btn_add_stop;
     Button btn_save;
     Button btn_measure;
     LocationManager locationManager;
     String locationProvider;
     public static int locationNo = 1;
-    ArrayList<Marker> markers;
+    static ArrayList<Marker> markers;
     LoadingDialog loadDialog;
-    public double latitude;
-    public double longitude;
+    public static double latitude;
+    public static double longitude;
     public Criteria criteria;
     public String bestProvider;
 
@@ -291,14 +291,18 @@ public class MapsFragment extends Fragment implements LocationListener {
                 getCurrentLocation();
 
                 //TODO : get values from device and replace below
-                double value_N = rand();
-                double value_P = rand();
-                double value_K = rand();
-                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, value_N, value_P, value_K, latitude, longitude));
-                DecimalFormat df = new DecimalFormat("#.0");
-                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, String.format("N = %smg/kg\nP = %smg/kg\nK = %smg/kg", df.format(value_N), df.format(value_P), df.format(value_K)), false);
-                locationNo++;
-                markers.add(marker);
+                String cmdText = "<request>";
+                // Send command to Arduino board
+                MainActivity.connectedThread.write(cmdText);
+
+//                double value_N = rand();
+//                double value_P = rand();
+//                double value_K = rand();
+//                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, value_N, value_P, value_K, latitude, longitude));
+//                DecimalFormat df = new DecimalFormat("#.0");
+//                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, String.format("N = %smg/kg\nP = %smg/kg\nK = %smg/kg", df.format(value_N), df.format(value_P), df.format(value_K)), false);
+//                locationNo++;
+//                markers.add(marker);
                 LatLngBounds.Builder b = new LatLngBounds.Builder();
                 for (Marker m : markers) {
                     b.include(m.getPosition());
@@ -311,8 +315,8 @@ public class MapsFragment extends Fragment implements LocationListener {
                 gMap.animateCamera(cu);
                 Toast.makeText(getContext(), "Measuring NPK", Toast.LENGTH_SHORT);
 
-                MainActivity.SIZE += 1;
-                MainActivity.CHANGED = true;
+//                MainActivity.SIZE += 1;
+//                MainActivity.CHANGED = true;
             }
         });
         return view;
