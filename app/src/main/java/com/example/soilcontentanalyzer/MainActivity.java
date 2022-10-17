@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 toast_message = "Successfully Loaded Map data";
             }
             else {
-                toast_message = "Something Went Wrong ";
+                toast_message = "Unable to load Map data";
             }
             if (getApplicationContext() != null) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {

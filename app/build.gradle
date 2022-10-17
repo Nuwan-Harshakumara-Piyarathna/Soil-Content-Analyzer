@@ -7,7 +7,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.example.soilcontentanalyzer"
+        applicationId "com.cipher.pera.soilcontentanalyzer"
         minSdk 23
         targetSdk 31
         versionCode 1

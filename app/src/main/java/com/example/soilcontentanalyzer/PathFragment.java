@@ -30,6 +30,7 @@ import java.util.Objects;
 
 public class PathFragment extends Fragment {
 
+    private static final int REQUEST_ENABLE_BT = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -56,9 +57,16 @@ public class PathFragment extends Fragment {
         buttonConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentOpenBluetoothSettings = new Intent();
-                intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                startActivity(intentOpenBluetoothSettings);
+                if (!MainActivity.bluetoothAdapter.isEnabled()){
+                    Toast.makeText(getContext(), "Turning On Bluetooth...", Toast.LENGTH_SHORT).show();
+                    //intent to on bluetooth
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(intent, REQUEST_ENABLE_BT);
+                } else {
+                    Intent intentOpenBluetoothSettings = new Intent();
+                    intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                    startActivity(intentOpenBluetoothSettings);
+                }
             }
         });
 
@@ -146,9 +154,16 @@ public class PathFragment extends Fragment {
         buttonConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Move to adapter list
-                Intent intent = new Intent(getContext(), SelectDeviceActivity.class);
-                startActivity(intent);
+                if (!MainActivity.bluetoothAdapter.isEnabled()){
+                    Toast.makeText(getContext(), "Turning On Bluetooth...", Toast.LENGTH_SHORT).show();
+                    //intent to on bluetooth
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(intent, REQUEST_ENABLE_BT);
+                } else {
+                    // Move to adapter list
+                    Intent intent = new Intent(getContext(), SelectDeviceActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

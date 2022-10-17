@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -39,10 +40,14 @@ public class SelectDeviceActivity extends AppCompatActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
         } else {
             View view = findViewById(R.id.recyclerViewDevice);
-            Snackbar snackbar = Snackbar.make(view, "Activate Bluetooth or pair a Bluetooth device", Snackbar.LENGTH_INDEFINITE);
+            Snackbar snackbar = Snackbar.make(view, "Pair a Bluetooth device", Snackbar.LENGTH_INDEFINITE);
             snackbar.setAction("OK", new View.OnClickListener() {
                 @Override
-                public void onClick(View view) { }
+                public void onClick(View view) {
+                    // Move to MainActivity
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
             });
             snackbar.show();
         }

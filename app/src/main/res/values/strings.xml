@@ -110,4 +110,7 @@ We want to inform users of this Service that these third parties have access to 
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <!--Select Bluetotth Device Activity-->
+    <string name="paired_devices">Paired Devices</string>
 </resources>
