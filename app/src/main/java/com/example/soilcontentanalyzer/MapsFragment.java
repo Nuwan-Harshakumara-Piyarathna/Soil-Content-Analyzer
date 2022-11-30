@@ -52,7 +52,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -79,8 +78,11 @@ public class MapsFragment extends Fragment implements LocationListener {
     LoadingDialog loadDialog;
     public static double latitude;
     public static double longitude;
+    public static Double initialLatitude;
+    public static Double initialLongitude;
     public Criteria criteria;
     public String bestProvider;
+
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -94,6 +96,7 @@ public class MapsFragment extends Fragment implements LocationListener {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
+            Log.e("HELP", "onMapReady() called");
 
             //            https://github.com/girishnair12345/Google-Maps-V2-library
             //            https://stackoverflow.com/questions/16416041/zoom-to-fit-all-markers-on-map-google-maps-v2
@@ -112,20 +115,26 @@ public class MapsFragment extends Fragment implements LocationListener {
                         1);
             }
             mapHelper = new MapHelper(googleMap);
-
-            markers = new ArrayList<>();
-
+            if (SplashActivity.isFirstTimeMap) {
+                markers = new ArrayList<>();
+            }
             //For testing
-            drawPathWithSomeMarkers();
+            // TODO: remove this when tested
+//            drawPathWithSomeMarkers();
             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
             locationProvider = LocationManager.NETWORK_PROVIDER;
-            // I suppressed the missing-permission warning because this wouldn't be executed in my
-            // case without location services being enabled
-//            @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-//            double userLat = lastKnownLocation.getLatitude();
-//            double userLong = lastKnownLocation.getLongitude();
             getCurrentLocation();
-            MainActivity.previousPoints.push(new LatLng(latitude, longitude));
+            if (initialLongitude == null) {
+                initialLatitude = latitude;
+                initialLongitude = longitude;
+                MainActivity.previousPointsStack.push(new LatLng(latitude, longitude));
+                MainActivity.previousPointsList.add(new LatLng(latitude, longitude));
+            }
+
+            Marker m1 = mapHelper.addMarker(initialLatitude, initialLongitude, "Initial Location", "", true);
+            if (SplashActivity.isFirstTimeMap) {
+                markers.add(m1);
+            }
 //            Marker m3 = mapHelper.addMarker(latitude, longitude, "My Location", "Nuwan", false);
             //            markers.add(m3);
             //            googleMap.setMyLocationEnabled(true);
@@ -137,6 +146,7 @@ public class MapsFragment extends Fragment implements LocationListener {
             mapHelper.setZoomControlsEnabled(true);
 
             //Calculate the markers to get their position
+
             LatLngBounds.Builder b = new LatLngBounds.Builder();
             for (Marker m : markers) {
                 b.include(m.getPosition());
@@ -177,6 +187,11 @@ public class MapsFragment extends Fragment implements LocationListener {
                     return info;
                 }
             });
+            for(Path p:MainActivity.paths) {
+                gMap.addPolyline(new PolylineOptions().add(new LatLng(p.getLatitudeP1(),p.getLongitudeP1()), new LatLng(p.getLatitudeP2(),p.getLongitudeP2())).width(5).color(Color.BLACK));
+            }
+            SplashActivity.isFirstTimeMap = false;
+
         }
     };
 
@@ -200,17 +215,18 @@ public class MapsFragment extends Fragment implements LocationListener {
         Marker m2 = mapHelper.addMarker(7.29067, 80.21683, "Location 2", "", true);
         markers.add(m2);
 
-        if (! MainActivity.CHANGED) {
-            MainActivity.paths.add(new Path(l1.latitude,l1.longitude,l2.latitude,l2.longitude));
-            MainActivity.paths.add(new Path(l2.latitude,l2.longitude,l3.latitude,l3.longitude));
-            MainActivity.paths.add(new Path(l3.latitude,l3.longitude,l4.latitude,l4.longitude));
-            MainActivity.paths.add(new Path(l4.latitude,l4.longitude,l1.latitude,l1.longitude));
+        if (!MainActivity.CHANGED) {
+            MainActivity.paths.add(new Path(l1.latitude, l1.longitude, l2.latitude, l2.longitude));
+            MainActivity.paths.add(new Path(l2.latitude, l2.longitude, l3.latitude, l3.longitude));
+            MainActivity.paths.add(new Path(l3.latitude, l3.longitude, l4.latitude, l4.longitude));
+            MainActivity.paths.add(new Path(l4.latitude, l4.longitude, l1.latitude, l1.longitude));
             MainActivity.CHANGED = true;
         }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.e("HELP", "onCreate() called");
         super.onCreate(savedInstanceState);
         LocationManager service = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = service
@@ -228,6 +244,7 @@ public class MapsFragment extends Fragment implements LocationListener {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Log.e("HELP", "onCreateView() called");
         Toast.makeText(getContext(), "OnCreateView", Toast.LENGTH_SHORT);
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         btn_add_stop = view.findViewById(R.id.btn_add_stop);
@@ -245,9 +262,10 @@ public class MapsFragment extends Fragment implements LocationListener {
 //                @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
 //                double userLat = lastKnownLocation.getLatitude();
 //                double userLong = lastKnownLocation.getLongitude();
-                LatLng latLng1 = MainActivity.previousPoints.pop();
+                LatLng latLng1 = MainActivity.previousPointsStack.pop();
                 LatLng latLng2 = new LatLng(latitude, longitude);
-                MainActivity.previousPoints.push(latLng2);
+                MainActivity.previousPointsStack.push(latLng2);
+                MainActivity.previousPointsList.add(latLng2);
                 MainActivity.paths.add(new Path(latLng1.latitude, latLng1.longitude, latitude, longitude));
                 MainActivity.CHANGED = true;
                 Polyline line1 = gMap.addPolyline(new PolylineOptions().add(latLng1, latLng2).width(5).color(Color.BLACK));
@@ -258,7 +276,12 @@ public class MapsFragment extends Fragment implements LocationListener {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Saving map", Toast.LENGTH_SHORT);
+                LatLng latLng1 = MainActivity.previousPointsStack.pop();
+                LatLng latLng0 = MainActivity.previousPointsList.get(0);
+                MainActivity.paths.add(new Path(latLng1.latitude, latLng1.longitude, latLng0.latitude, latLng0.longitude));
+                MainActivity.CHANGED = true;
+                Polyline line1 = gMap.addPolyline(new PolylineOptions().add(latLng1, latLng0).width(5).color(Color.BLACK));
+                Toast.makeText(getContext(), "Completed the Map. Saving ....", Toast.LENGTH_SHORT);
                 if (!MainActivity.CHANGED) {
                     Toast.makeText(getContext(), "First update the Map", Toast.LENGTH_SHORT).show();
                 } else {
@@ -433,7 +456,8 @@ public class MapsFragment extends Fragment implements LocationListener {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getContext(), "OnViewCreated", Toast.LENGTH_SHORT);
+        Log.e("HELP", "onViewCreated() called");
+//        Toast.makeText(getContext(), "OnViewCreated", Toast.LENGTH_SHORT);
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -462,14 +486,11 @@ public class MapsFragment extends Fragment implements LocationListener {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 Toast.makeText(getContext(), "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 //This is what you need:
                 locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
             }
-        }
-        else
-        {
+        } else {
             //prompt user to enable location....
             ActivityCompat.requestPermissions(getActivity(), new String[]{
                             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -493,14 +514,11 @@ public class MapsFragment extends Fragment implements LocationListener {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 Toast.makeText(getContext(), "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 //This is what you need:
                 locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
             }
-        }
-        else
-        {
+        } else {
             //prompt user to enable location....
             ActivityCompat.requestPermissions(getActivity(), new String[]{
                             Manifest.permission.ACCESS_FINE_LOCATION,

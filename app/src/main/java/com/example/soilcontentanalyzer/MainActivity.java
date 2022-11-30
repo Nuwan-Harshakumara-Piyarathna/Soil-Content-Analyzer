@@ -1,18 +1,16 @@
 package com.example.soilcontentanalyzer;
 
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import android.app.Activity;
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -20,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -28,7 +27,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -52,10 +50,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -67,10 +63,13 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    private static Context context;
 
     public static ArrayList<Measurement> measurements = new ArrayList<Measurement>();
     public static ArrayList<Path> paths = new ArrayList<>();
-    public static Stack<LatLng> previousPoints = new Stack<>();
+    public static Stack<LatLng> previousPointsStack = new Stack<>();
+    public static ArrayList<LatLng> previousPointsList = new ArrayList<>();
+
     //set this CHANGED variable to true only if data (measurements and/or paths) is updated
     public static boolean CHANGED = false;
     public static int SIZE = 0;
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //finish();
                         // Terminate Bluetooth Connection and close app
-                        if (createConnectThread != null){
+                        if (createConnectThread != null) {
                             createConnectThread.cancel();
                         }
                         finishAffinity();
@@ -145,20 +144,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MainActivity.context = getApplicationContext();
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         loadDialog = new LoadingDialog(this);
         loadDialog.startLoadingDialog();
-        Log.e("MainActivity","getting Field Map");
+        Log.e("MainActivity", "getting Field Map");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 getFieldMap();
             }
         }).start();
-        Log.e("MainActivity","got the Field Map");
+        Log.e("MainActivity", "got the Field Map");
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -172,8 +172,9 @@ public class MainActivity extends AppCompatActivity {
     private void getFieldMap() {
         Log.d("Okhttp3:", "getFieldMap function called");
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-        String baseURL =pref.getString("baseURL",null);
+        String baseURL = pref.getString("baseURL", null);
         String url = baseURL + "/map/find";
+        Log.e("BASE_URL", ""+baseURL);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS) // connect timeout
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(jsonData);
             JSONArray pathsArray = jsonObject.getJSONArray("paths");
             JSONArray measurementsArray = jsonObject.getJSONArray("measurements");
-            ArrayList<Path>  loadedPaths = new ArrayList<>();
+            ArrayList<Path> loadedPaths = new ArrayList<>();
             double latitudeP1, longitudeP1, latitudeP2, longitudeP2;
             for (int i = 0; i < pathsArray.length(); i++) {
                 JSONObject object1 = pathsArray.getJSONObject(i);
@@ -205,9 +206,9 @@ public class MainActivity extends AppCompatActivity {
                 loadedPaths.add(path);
             }
             MainActivity.paths = loadedPaths;
-            if(paths.size() > 0) {
-                Log.e(TAG, "getFieldMap:- Paths size :"+ MainActivity.paths.size());
-                Log.e(TAG, "getFieldMap:- Paths :"+ MainActivity.paths);
+            if (paths.size() > 0) {
+                Log.e(TAG, "getFieldMap:- Paths size :" + MainActivity.paths.size());
+                Log.e(TAG, "getFieldMap:- Paths :" + MainActivity.paths);
             }
             ArrayList<Measurement> loadedMeasurements = new ArrayList<>();
             int location;
@@ -226,15 +227,14 @@ public class MainActivity extends AppCompatActivity {
                 loadedMeasurements.add(measurement);
             }
             MainActivity.measurements = loadedMeasurements;
-            if(measurements.size() > 0) {
-                Log.e(TAG, "getFieldMap:- Measurements size :"+ MainActivity.measurements.size());
-                Log.e(TAG, "getFieldMap:- Measurements :"+ MainActivity.measurements);
+            if (measurements.size() > 0) {
+                Log.e(TAG, "getFieldMap:- Measurements size :" + MainActivity.measurements.size());
+                Log.e(TAG, "getFieldMap:- Measurements :" + MainActivity.measurements);
             }
             final String toast_message;
-            if (response.code() == 200){
+            if (response.code() == 200) {
                 toast_message = "Successfully Loaded Map data";
-            }
-            else {
+            } else {
                 toast_message = "Unable to load Map data";
             }
             if (getApplicationContext() != null) {
@@ -263,8 +263,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-        String jwt = pref.getString("jwt",null);
-        if(jwt==null){
+        String jwt = pref.getString("jwt", null);
+        if (jwt == null) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }
@@ -291,8 +291,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
-
-
 
 
     public void installButton90to90() {
@@ -357,15 +355,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkForUpdates() {
-        Log.e("VERSION CODE",String.valueOf(BuildConfig.VERSION_CODE));
-        Log.e("VERSION NAME",String.valueOf(BuildConfig.VERSION_NAME));
+        Log.e("VERSION CODE", String.valueOf(BuildConfig.VERSION_CODE));
+        Log.e("VERSION NAME", String.valueOf(BuildConfig.VERSION_NAME));
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-        String baseURL =pref.getString("baseURL",null);
+        String baseURL = pref.getString("baseURL", null);
+        Log.e("BASE_URL", baseURL);
         String url = baseURL + "/all/version/find";
+        Log.e("VERSION_URL", url);
 
         JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
                 new com.android.volley.Response.Listener<JSONObject>() {
@@ -373,10 +373,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             String newerVersion = response.getString("version");
-                            Log.e("BACKEND VERSION",newerVersion);
+                            Log.e("BACKEND VERSION", newerVersion);
                             String currentVersion = String.valueOf(BuildConfig.VERSION_NAME);
-                            if(newerVersion.compareTo(currentVersion) > 0){
-                                android.view.ContextThemeWrapper ctw = new android.view.ContextThemeWrapper(MainActivity.this,R.style.Theme_AlertDialog);
+                            if (newerVersion.compareTo(currentVersion) > 0) {
+                                android.view.ContextThemeWrapper ctw = new android.view.ContextThemeWrapper(MainActivity.this, R.style.Theme_AlertDialog);
                                 final android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(ctw);
                                 alertDialogBuilder.setTitle("Update Quiz Me");
                                 alertDialogBuilder.setCancelable(false);
@@ -384,13 +384,12 @@ public class MainActivity extends AppCompatActivity {
                                 alertDialogBuilder.setMessage("Quiz Me recommends that you update to the latest version for a seamless & enhanced performance of the app.");
                                 alertDialogBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        try{
-                                            Log.e("UPDATE TRYCATCH","try");
-                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id="+getPackageName())));
-                                        }
-                                        catch (ActivityNotFoundException e){
-                                            Log.e("UPDATE TRYCATCH","catch");
-                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName())));
+                                        try {
+                                            Log.e("UPDATE TRYCATCH", "try");
+                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + getPackageName())));
+                                        } catch (ActivityNotFoundException e) {
+                                            Log.e("UPDATE TRYCATCH", "catch");
+                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
                                         }
                                     }
                                 });
@@ -425,6 +424,16 @@ public class MainActivity extends AppCompatActivity {
              */
             BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(address);
             BluetoothSocket tmp = null;
+            if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             UUID uuid = bluetoothDevice.getUuids()[0].getUuid();
 
             try {
@@ -445,6 +454,16 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             // Cancel discovery because it otherwise slows down the connection.
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             bluetoothAdapter.cancelDiscovery();
             try {
                 // Connect to the remote device through the socket. This call blocks

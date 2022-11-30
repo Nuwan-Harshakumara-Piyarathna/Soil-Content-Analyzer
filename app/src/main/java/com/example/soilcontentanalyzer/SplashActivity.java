@@ -41,6 +41,7 @@ public class SplashActivity extends AppCompatActivity {
     CountDownTimer timer;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    public static boolean isFirstTimeMap = true;
 
     @Override
     protected void onStart() {
@@ -156,7 +157,7 @@ public class SplashActivity extends AppCompatActivity {
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("baseURL", "https://soilanalyzer.herokuapp.com");
+        editor.putString("baseURL", "https://angelic-phoenix-370102.el.r.appspot.com");
         editor.commit();
 
 
