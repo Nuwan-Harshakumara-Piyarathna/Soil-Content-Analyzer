@@ -5,7 +5,7 @@
     >
 
     <TableRow
-        android:weightSum="10"
+        android:weightSum="12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border">
@@ -38,6 +38,15 @@
 
         <TextView
             android:id="@+id/measurement_K"
+            android:textSize="16dp"
+            android:padding="10dp"
+            android:layout_width="0dp"
+            android:gravity="center_horizontal"
+            android:background="@drawable/border"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:id="@+id/measurement_PH"
             android:textSize="16dp"
             android:padding="10dp"
             android:layout_width="0dp"

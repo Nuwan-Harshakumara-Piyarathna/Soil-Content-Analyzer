@@ -9,30 +9,30 @@
     android:padding="@dimen/activity_privacy_policy_padding"
     tools:context="com.example.soilcontentanalyzer.SelectDeviceActivity">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/privacy_policy"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/paired_devices"
-        android:textAlignment="center"
-        android:textColor="@color/activity_privacy_policy_text_color"
-        android:textSize="@dimen/activity_privacy_policy_header_1_text_size"
-        android:textStyle="bold" />
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewDevice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/dark_dark_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/privacy_policy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/paired_devices"
+            android:textAlignment="center"
+            android:textColor="@color/activity_privacy_policy_text_color"
+            android:textSize="@dimen/activity_privacy_policy_header_1_text_size"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewDevice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_dark_green"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
 </ScrollView>

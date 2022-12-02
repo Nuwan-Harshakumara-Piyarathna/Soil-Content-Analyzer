@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
@@ -17,6 +18,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.soilcontentanalyzer.Model.Measurement;
 import com.example.soilcontentanalyzer.helper.MapHelper;
@@ -52,6 +55,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -71,6 +75,8 @@ public class MapsFragment extends Fragment implements LocationListener {
     Button btn_add_stop;
     Button btn_save;
     Button btn_measure;
+    Button btn_clear_all;
+    LinearLayout linearLayout;
     LocationManager locationManager;
     String locationProvider;
     public static int locationNo = 1;
@@ -82,6 +88,7 @@ public class MapsFragment extends Fragment implements LocationListener {
     public static Double initialLongitude;
     public Criteria criteria;
     public String bestProvider;
+
 
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -146,6 +153,11 @@ public class MapsFragment extends Fragment implements LocationListener {
             mapHelper.setZoomControlsEnabled(true);
 
             //Calculate the markers to get their position
+            for (Measurement m:MainActivity.measurements) {
+                DecimalFormat df = new DecimalFormat("#.0");
+                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, String.format("N = %smg/kg\nP = %smg/kg\nK = %smg/kg\nK = %smg/kg", df.format(m.getN()), df.format(m.getP()), df.format(m.getK()),df.format(m.getPh())), false);
+                markers.add(marker);
+            }
 
             LatLngBounds.Builder b = new LatLngBounds.Builder();
             for (Marker m : markers) {
@@ -250,6 +262,40 @@ public class MapsFragment extends Fragment implements LocationListener {
         btn_add_stop = view.findViewById(R.id.btn_add_stop);
         btn_save = view.findViewById(R.id.btn_save);
         btn_measure = view.findViewById(R.id.btn_measure);
+        linearLayout = view.findViewById(R.id.linearlayout1);
+        ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+        // Changes the height and width to the specified *pixels*
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        try {
+            display.getRealSize(size);
+        } catch (NoSuchMethodError err) {
+            display.getSize(size);
+        }
+//        int width = size.x;
+        int height = size.y;
+        params.height = (int)(height*7/10);
+        linearLayout.setLayoutParams(params);
+
+        btn_clear_all = view.findViewById(R.id.btn_clear);
+        if(markers != null && markers.size() > 0) {
+            btn_clear_all.setVisibility(View.VISIBLE);
+        }
+
+        btn_clear_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Clearing all map data", Toast.LENGTH_SHORT);
+                loadDialog = new LoadingDialog(getActivity());
+                loadDialog.startLoadingDialog();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        doDeleteRequest();
+                    }
+                }).start();
+            }
+        });
 
         btn_add_stop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,16 +362,23 @@ public class MapsFragment extends Fragment implements LocationListener {
                 //TODO : get values from device and replace below
                 String cmdText = "<request>";
                 // Send command to Arduino board
+//                if(MainActivity.connectedThread == null){
+//                    MainActivity.connectedThread = new MainActivity.ConnectedThread(MainActivity.mmSocket);
+//                    MainActivity.connectedThread.run();
+//                    Log.e("MainActivity:Bluetooth","case 8");
+//                }
                 MainActivity.connectedThread.write(cmdText);
+                Log.e("MapsFragment","btn_measure onClick()");
 
-//                double value_N = rand();
-//                double value_P = rand();
-//                double value_K = rand();
-//                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, value_N, value_P, value_K, latitude, longitude));
-//                DecimalFormat df = new DecimalFormat("#.0");
-//                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, String.format("N = %smg/kg\nP = %smg/kg\nK = %smg/kg", df.format(value_N), df.format(value_P), df.format(value_K)), false);
-//                locationNo++;
-//                markers.add(marker);
+                double value_N = rand();
+                double value_P = rand();
+                double value_K = rand();
+                double value_PH = rand();
+                MainActivity.measurements.add(new Measurement(MainActivity.SIZE, value_N, value_P, value_K, value_PH, latitude, longitude));
+                DecimalFormat df = new DecimalFormat("#.0");
+                Marker marker = mapHelper.addMarker(latitude, longitude, "Location " + locationNo, String.format("N = %smg/kg\nP = %smg/kg\nK = %smg/kg\nPH = %smg/kg", df.format(value_N), df.format(value_P), df.format(value_K),df.format(value_PH)), false);
+                locationNo++;
+                markers.add(marker);
                 LatLngBounds.Builder b = new LatLngBounds.Builder();
                 for (Marker m : markers) {
                     b.include(m.getPosition());
@@ -337,9 +390,8 @@ public class MapsFragment extends Fragment implements LocationListener {
                 CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
                 gMap.animateCamera(cu);
                 Toast.makeText(getContext(), "Measuring NPK", Toast.LENGTH_SHORT);
-
-//                MainActivity.SIZE += 1;
-//                MainActivity.CHANGED = true;
+                MainActivity.SIZE += 1;
+                MainActivity.CHANGED = true;
             }
         });
         return view;
@@ -383,6 +435,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                 jo.put("n", measurement.getN());
                 jo.put("p", measurement.getP());
                 jo.put("k", measurement.getK());
+                jo.put("ph", measurement.getPh());
                 jo.put("latitude", measurement.getLatitude());
                 jo.put("longitude", measurement.getLongitude());
 
@@ -563,5 +616,60 @@ public class MapsFragment extends Fragment implements LocationListener {
     @Override
     public void onProviderDisabled(@NonNull String provider) {
 
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void doDeleteRequest() {
+        Log.d("Okhttp3:", "doDeleteRequest function called");
+        SharedPreferences pref = getContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String baseURL =pref.getString("baseURL",null);
+        String url = baseURL + "/map/delete";
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // connect timeout
+                .writeTimeout(30, TimeUnit.SECONDS) // write timeout
+                .readTimeout(30, TimeUnit.SECONDS) // read timeout
+                .build();
+
+        String jwt = pref.getString("jwt", null);
+        Log.d("Okhttp3:", "jwt = " + jwt);
+        Request request = new Request.Builder().header("Authorization", "Bearer " + jwt).url(url).delete().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            Log.d("Okhttp3:", "request done, got the response");
+            Log.d("Okhttp3:", String.valueOf(response.body()));
+            final String toast_message;
+            loadDialog.dismissDialog();
+            if (response.code() == 200){
+                toast_message = "Successfully cleared Map data";
+                MainActivity.measurements.clear();
+                MainActivity.paths.clear();
+                MainActivity.CHANGED = false;
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        btn_clear_all.setVisibility(View.GONE);
+//                    }
+//                });
+            }
+            else {
+                Log.e("Okhttp3:", String.valueOf(response.body()));
+                toast_message = "Something Went Wrong ";
+            }
+            if (getContext() != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Log.d("Okhttp3:", toast_message);
+                        Toast.makeText(getContext(), toast_message, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        } catch (IOException e) {
+            loadDialog.dismissDialog();
+            Toast.makeText(getContext(), "Something Went Wrong", Toast.LENGTH_LONG);
+            e.printStackTrace();
+        }
     }
 }

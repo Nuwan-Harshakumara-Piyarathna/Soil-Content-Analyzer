@@ -12,6 +12,7 @@
         android:padding="16dp"
         android:background="@drawable/btn_state"
         android:orientation="vertical"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,7 +28,8 @@
         <TextView
             android:id="@+id/textViewDeviceAddress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <View

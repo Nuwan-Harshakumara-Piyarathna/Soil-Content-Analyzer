@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -25,8 +26,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -40,6 +45,7 @@ import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
 import com.fangxu.allangleexpandablebutton.ButtonEventListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -50,7 +56,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
@@ -82,11 +90,14 @@ public class MainActivity extends AppCompatActivity {
     public static BluetoothSocket mmSocket;
     public static ConnectedThread connectedThread;
     public static CreateConnectThread createConnectThread;
+    public static boolean isConnected = false;
 
     public final static int CONNECTING_STATUS = 1; // used in bluetooth handler to identify message status
     public final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
 
     static BottomNavigationView bottomNav;
+
+    private static final int REQUEST_ENABLE_BT = 0;
 
     String TAG = "MainActivity";
     LoadingDialog loadDialog;
@@ -146,8 +157,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MainActivity.context = getApplicationContext();
 
+        BluetoothManager bluetoothManager = getApplicationContext().getSystemService(BluetoothManager.class);
+        MainActivity.bluetoothAdapter = bluetoothManager.getAdapter();
+        if (MainActivity.bluetoothAdapter == null) {
+            // Device doesn't support Bluetooth
+            Toast.makeText(getApplicationContext(),"Device doesn't support Bluetooth",Toast.LENGTH_SHORT);
+        }
+
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+        final Button buttonConnect = findViewById(R.id.btn_bluetooth);
+        final ProgressBar progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         loadDialog = new LoadingDialog(this);
         loadDialog.startLoadingDialog();
@@ -165,7 +186,110 @@ public class MainActivity extends AppCompatActivity {
                     new PathFragment()).commit();
         }
         installButton90to90();
-        checkForUpdates();
+//        checkForUpdates();
+
+        buttonConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!MainActivity.bluetoothAdapter.isEnabled()){
+                    Toast.makeText(getApplicationContext(), "Turning On Bluetooth...", Toast.LENGTH_SHORT).show();
+                    //intent to on bluetooth
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(intent, REQUEST_ENABLE_BT);
+                } else {
+                    Intent intentOpenBluetoothSettings = new Intent();
+                    intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                    startActivity(intentOpenBluetoothSettings);
+                }
+            }
+        });
+
+        MainActivity.deviceName = getIntent().getStringExtra("deviceName");
+        if (MainActivity.deviceName != null){
+            // Get the device address to make BT Connection
+            MainActivity.deviceAddress = getIntent().getStringExtra("deviceAddress");
+            // Show progree and connection status
+            buttonConnect.setText("Connecting to " + MainActivity.deviceName + "...");
+            progressBar.setVisibility(View.VISIBLE);
+            buttonConnect.setEnabled(false);
+
+            /*
+            This is the most important piece of code. When "deviceName" is found
+            the code will call a new thread to create a bluetooth connection to the
+            selected device (see the thread code below)
+             */
+            Log.e("PathFragment:Bluetooth",""+"Case 7");
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            MainActivity.createConnectThread = new MainActivity.CreateConnectThread(bluetoothAdapter,MainActivity.deviceAddress);
+            MainActivity.createConnectThread.start();
+        }
+
+        /*
+        Second most important piece of Code. GUI Handler
+         */
+        MainActivity.handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg){
+                switch (msg.what){
+                    case MainActivity.CONNECTING_STATUS:
+                        switch(msg.arg1){
+                            case 1:
+                                buttonConnect.setText("Connected to " + MainActivity.deviceName);
+                                progressBar.setVisibility(View.GONE);
+                                buttonConnect.setEnabled(true);
+                                break;
+                            case -1:
+                                buttonConnect.setText("Device fails to connect");
+                                progressBar.setVisibility(View.GONE);
+                                buttonConnect.setEnabled(true);
+                                break;
+                        }
+                        break;
+
+                    case MainActivity.MESSAGE_READ:
+                        String arduinoMsg = msg.obj.toString(); // Read message from Arduino
+                        Log.e("READ_MESSAGE:",arduinoMsg);
+                        if (arduinoMsg.isEmpty()) break;
+                        String myMsg = "Message : " + arduinoMsg;
+//                        Toast.makeText(getActivity(), myMsg,Toast.LENGTH_LONG).show();
+                        String arr[] = arduinoMsg.split(",");
+                        Log.e("Array", Arrays.toString(arr));
+                        if (arr.length != 4) break;
+                        double value_N = Double.parseDouble(arr[0]);
+                        double value_P = Double.parseDouble(arr[1]);
+                        double value_K = Double.parseDouble(arr[2]);
+                        double value_PH = Double.parseDouble(arr[3]);
+                        //TODO:Arduino Read
+//                        MainActivity.measurements.add(new Measurement(MainActivity.SIZE, value_N, value_P, value_K, value_PH, MapsFragment.latitude, MapsFragment.longitude));
+//                        DecimalFormat df = new DecimalFormat("#.0");
+//                        if(MapsFragment.gMap != null && MapsFragment.mapHelper != null) {
+//                            Marker marker = MapsFragment.mapHelper.addMarker(MapsFragment.latitude, MapsFragment.longitude, "Location " + MapsFragment.locationNo, String.format("N = %smg/kg\nP = %smg/kg\nK = %smg/kg", df.format(value_N), df.format(value_P), df.format(value_K)), false);
+//                            MapsFragment.markers.add(marker);
+//                        }
+//                        MapsFragment.locationNo++;
+//                        MainActivity.SIZE += 1;
+//                        MainActivity.CHANGED = true;
+                        break;
+                }
+            }
+        };
+
+        // Select Bluetooth Device
+        buttonConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!MainActivity.bluetoothAdapter.isEnabled()){
+                    Toast.makeText(getApplicationContext(), "Turning On Bluetooth...", Toast.LENGTH_SHORT).show();
+                    //intent to on bluetooth
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(intent, REQUEST_ENABLE_BT);
+                } else {
+                    // Move to adapter list
+                    Intent intent = new Intent(getApplicationContext(), SelectDeviceActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 
@@ -205,28 +329,30 @@ public class MainActivity extends AppCompatActivity {
                 //store the data into the array
                 loadedPaths.add(path);
             }
-            MainActivity.paths = loadedPaths;
+            paths = loadedPaths;
             if (paths.size() > 0) {
                 Log.e(TAG, "getFieldMap:- Paths size :" + MainActivity.paths.size());
                 Log.e(TAG, "getFieldMap:- Paths :" + MainActivity.paths);
             }
             ArrayList<Measurement> loadedMeasurements = new ArrayList<>();
             int location;
-            double N, P, K, latitude, longitude;
+            double N, P, K, PH, latitude, longitude;
             for (int i = 0; i < measurementsArray.length(); i++) {
                 JSONObject object2 = measurementsArray.getJSONObject(i);
                 location = object2.getInt("location");
                 N = object2.getDouble("n");
                 P = object2.getDouble("p");
                 K = object2.getDouble("k");
+                PH = object2.getDouble("ph");
                 latitude = object2.getDouble("latitude");
                 longitude = object2.getDouble("longitude");
 
-                Measurement measurement = new Measurement(location, N, P, K, latitude, longitude);
+                Measurement measurement = new Measurement(location, N, P, K, PH, latitude, longitude);
                 //store the data into the array
-                loadedMeasurements.add(measurement);
+                //TODO: consider this
+//                loadedMeasurements.add(measurement);
             }
-            MainActivity.measurements = loadedMeasurements;
+            measurements = loadedMeasurements;
             if (measurements.size() > 0) {
                 Log.e(TAG, "getFieldMap:- Measurements size :" + MainActivity.measurements.size());
                 Log.e(TAG, "getFieldMap:- Measurements :" + MainActivity.measurements);
@@ -354,63 +480,63 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void checkForUpdates() {
-        Log.e("VERSION CODE", String.valueOf(BuildConfig.VERSION_CODE));
-        Log.e("VERSION NAME", String.valueOf(BuildConfig.VERSION_NAME));
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-        String baseURL = pref.getString("baseURL", null);
-        Log.e("BASE_URL", baseURL);
-        String url = baseURL + "/all/version/find";
-        Log.e("VERSION_URL", url);
-
-        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
-                new com.android.volley.Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String newerVersion = response.getString("version");
-                            Log.e("BACKEND VERSION", newerVersion);
-                            String currentVersion = String.valueOf(BuildConfig.VERSION_NAME);
-                            if (newerVersion.compareTo(currentVersion) > 0) {
-                                android.view.ContextThemeWrapper ctw = new android.view.ContextThemeWrapper(MainActivity.this, R.style.Theme_AlertDialog);
-                                final android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(ctw);
-                                alertDialogBuilder.setTitle("Update Quiz Me");
-                                alertDialogBuilder.setCancelable(false);
-                                alertDialogBuilder.setIcon(R.drawable.playstore1);
-                                alertDialogBuilder.setMessage("Quiz Me recommends that you update to the latest version for a seamless & enhanced performance of the app.");
-                                alertDialogBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        try {
-                                            Log.e("UPDATE TRYCATCH", "try");
-                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + getPackageName())));
-                                        } catch (ActivityNotFoundException e) {
-                                            Log.e("UPDATE TRYCATCH", "catch");
-                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
-                                        }
-                                    }
-                                });
-                                alertDialogBuilder.show();
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(request);
-
-    }
+//    private void checkForUpdates() {
+//        Log.e("VERSION CODE", String.valueOf(BuildConfig.VERSION_CODE));
+//        Log.e("VERSION NAME", String.valueOf(BuildConfig.VERSION_NAME));
+//
+//        // Instantiate the RequestQueue.
+//        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+//
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+//        String baseURL = pref.getString("baseURL", null);
+//        Log.e("BASE_URL", baseURL);
+//        String url = baseURL + "/all/version/find";
+//        Log.e("VERSION_URL", url);
+//
+//        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
+//                new com.android.volley.Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        try {
+//                            String newerVersion = response.getString("version");
+//                            Log.e("BACKEND VERSION", newerVersion);
+//                            String currentVersion = String.valueOf(BuildConfig.VERSION_NAME);
+//                            if (newerVersion.compareTo(currentVersion) > 0) {
+//                                android.view.ContextThemeWrapper ctw = new android.view.ContextThemeWrapper(MainActivity.this, R.style.Theme_AlertDialog);
+//                                final android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(ctw);
+//                                alertDialogBuilder.setTitle("Update Quiz Me");
+//                                alertDialogBuilder.setCancelable(false);
+//                                alertDialogBuilder.setIcon(R.drawable.playstore1);
+//                                alertDialogBuilder.setMessage("Quiz Me recommends that you update to the latest version for a seamless & enhanced performance of the app.");
+//                                alertDialogBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        try {
+//                                            Log.e("UPDATE TRYCATCH", "try");
+//                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + getPackageName())));
+//                                        } catch (ActivityNotFoundException e) {
+//                                            Log.e("UPDATE TRYCATCH", "catch");
+//                                            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
+//                                        }
+//                                    }
+//                                });
+//                                alertDialogBuilder.show();
+//
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, new com.android.volley.Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                error.printStackTrace();
+//            }
+//        });
+//
+//        // Add the request to the RequestQueue.
+//        queue.add(request);
+//
+//    }
 
     /* ============================ Thread to Create Bluetooth Connection =================================== */
     public static class CreateConnectThread extends Thread {
@@ -418,22 +544,23 @@ public class MainActivity extends AppCompatActivity {
         private String TAG = "CONNECT DEVICE";
 
         public CreateConnectThread(BluetoothAdapter bluetoothAdapter, String address) {
+            Log.e("MainActivity:Bluetooth","CreateConnectThread(BluetoothAdapter bluetoothAdapter, String address)");
             /*
             Use a temporary object that is later assigned to mmSocket
             because mmSocket is final.
              */
             BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(address);
             BluetoothSocket tmp = null;
-            if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
+//            if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+//                // TODO: Consider calling
+//                //    ActivityCompat#requestPermissions
+//                // here to request the missing permissions, and then overriding
+//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                //                                          int[] grantResults)
+//                // to handle the case where the user grants the permission. See the documentation
+//                // for ActivityCompat#requestPermissions for more details.
+//                return;
+//            }
             UUID uuid = bluetoothDevice.getUuids()[0].getUuid();
 
             try {
@@ -452,26 +579,34 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void run() {
+            Log.e("MainActivity:Bluetooth","run() 1");
             // Cancel discovery because it otherwise slows down the connection.
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
+//            if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+//                Log.e("MainActivity:Bluetooth","case 1");
+//                // TODO: Consider calling
+//                //    ActivityCompat#requestPermissions
+//                // here to request the missing permissions, and then overriding
+//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                //                                          int[] grantResults)
+//                // to handle the case where the user grants the permission. See the documentation
+//                // for ActivityCompat#requestPermissions for more details.
+//                return;
+//            }
             bluetoothAdapter.cancelDiscovery();
+            Log.e("MainActivity:Bluetooth","case 2");
+
             try {
                 // Connect to the remote device through the socket. This call blocks
                 // until it succeeds or throws an exception.
+                Log.e("MainActivity:Bluetooth","case 3");
                 mmSocket.connect();
+                Log.e("MainActivity:Bluetooth","case 4");
                 Log.e("Status", "Device connected");
+                isConnected = true;
                 handler.obtainMessage(CONNECTING_STATUS, 1, -1).sendToTarget();
             } catch (IOException connectException) {
+                Log.e("MainActivity:Bluetooth","case 5");
                 // Unable to connect; close the socket and return.
                 try {
                     mmSocket.close();
@@ -482,15 +617,23 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return;
             }
+            Log.e("MainActivity:Bluetooth","case 6");
 
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
             connectedThread = new ConnectedThread(mmSocket);
             connectedThread.run();
+            if(connectedThread == null){
+                connectedThread = new ConnectedThread(mmSocket);
+                connectedThread.run();
+                Log.e("MainActivity:Bluetooth","case 8");
+            }
+            Log.e("MainActivity:Bluetooth","case 9");
         }
 
         // Closes the client socket and causes the thread to finish.
         public void cancel() {
+            Log.e("MainActivity:Bluetooth","cancel()");
             try {
                 mmSocket.close();
             } catch (IOException e) {
@@ -506,6 +649,7 @@ public class MainActivity extends AppCompatActivity {
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
+            Log.e("MainActivity:Bluetooth","ConnectedThread(BluetoothSocket socket)");
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -522,6 +666,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void run() {
+            Log.e("MainActivity:Bluetooth","run() 2");
             byte[] buffer = new byte[1024];  // buffer store for the stream
             int bytes = 0; // bytes returned from read()
             // Keep listening to the InputStream until an exception occurs
@@ -550,9 +695,13 @@ public class MainActivity extends AppCompatActivity {
 
         /* Call this from the main activity to send data to the remote device */
         public void write(String input) {
+            Log.e("MainActivity:Bluetooth","write(String input)"+input);
+            Log.e("MainActivity:Bluetooth",""+MainActivity.deviceName);
+            Log.e("MainActivity:Bluetooth",""+MainActivity.deviceAddress);
             byte[] bytes = input.getBytes(); //converts entered String into bytes
             try {
                 mmOutStream.write(bytes);
+                Log.e("MainActivity:Bluetooth","Message sent");
             } catch (IOException e) {
                 Log.e("Send Error","Unable to send message",e);
             }
